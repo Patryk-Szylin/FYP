@@ -72,7 +72,7 @@ public class GaSystem : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Alpha2))
         {
             //sortFitness(0);
             for (int i = 0; i < m_creatures.Count; i++)
@@ -81,7 +81,7 @@ public class GaSystem : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             //for (int i = 0; i < m_creatures.Count; i++)
             //{
