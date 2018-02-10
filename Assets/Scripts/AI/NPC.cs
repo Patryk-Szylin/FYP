@@ -33,14 +33,14 @@ public class NPC : MonoBehaviour
         if (m_moveRight)
         {
             transform.Translate(m_speed * Vector3.right * Time.deltaTime);
-            if (transform.position.x > 25f)
+            if (transform.position.x > 10f)
                 m_moveRight = false;
         }
 
         else
         {
             transform.Translate(m_speed * Vector3.left * Time.deltaTime);
-            if (transform.position.x < -25f)
+            if (transform.position.x < -10f)
                 m_moveRight = true;
         }
 
