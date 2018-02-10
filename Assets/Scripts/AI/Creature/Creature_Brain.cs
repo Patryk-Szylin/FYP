@@ -6,7 +6,7 @@ public class Creature_Brain : MonoBehaviour
 {
     public StackFSM m_brain = new StackFSM();
     public float m_speed = 50f;
-    public bool m_moveRight = true;
+    public bool m_moveForward = true;
     public float m_outOfRangeDistance = 25f;
 
     private Player _playerTarget;
@@ -23,21 +23,23 @@ public class Creature_Brain : MonoBehaviour
     public void idleWalk()
     {
         print("MOVE");
-        if (m_moveRight)
-        {
-            transform.Translate(m_speed * Vector3.right * Time.deltaTime);
-            if (transform.position.x > 10f)
-                m_moveRight = false;
-        }
 
+        // The position needs to be transformed from World Space to Local Space
+        var worldToLocalPos = transform.InverseTransformPoint(_initialPosition);
+        print(worldToLocalPos);
+
+        if (m_moveForward)
+        {
+            transform.Translate(m_speed * Vector3.forward * Time.deltaTime);
+            if (worldToLocalPos.z < -10f)
+                m_moveForward = false;
+        }
         else
         {
-            transform.Translate(m_speed * Vector3.left * Time.deltaTime);
-            if (transform.position.x < -10f)
-                m_moveRight = true;
+            transform.Translate(m_speed * Vector3.back * Time.deltaTime);
+            if (worldToLocalPos.z > 10f)
+                m_moveForward = true;
         }
-
-
 
         // check for nearby players
         Collider[] colliders = Physics.OverlapSphere(transform.position, 5f);
