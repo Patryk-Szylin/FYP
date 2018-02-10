@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Troll : Creature
+public class Troll : Creature_Genetics
 {
 
     // Use this for initialization

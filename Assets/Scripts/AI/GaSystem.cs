@@ -36,9 +36,9 @@ public class GaSystem : MonoBehaviour
 
     public GameObject m_prefab;
 
-    public List<Creature> m_creatures = new List<Creature>();
-    public List<Creature> m_orderedCreatures = new List<Creature>();
-    public List<Creature> m_newCreatures = new List<Creature>();
+    public List<Creature_Genetics> m_creatures = new List<Creature_Genetics>();
+    public List<Creature_Genetics> m_orderedCreatures = new List<Creature_Genetics>();
+    public List<Creature_Genetics> m_newCreatures = new List<Creature_Genetics>();
 
 
     private void Start()
@@ -94,8 +94,8 @@ public class GaSystem : MonoBehaviour
             //    }
             //}
 
-            var newCreature = Creature.Crossover(m_creatures[0], m_creatures[1]);
-            m_prefab.GetComponent<Creature>().AssignNewChromosomes(newCreature);
+            var newCreature = Creature_Genetics.Crossover(m_creatures[0], m_creatures[1]);
+            m_prefab.GetComponent<Creature_Genetics>().AssignNewChromosomes(newCreature);
 
             var go = Instantiate(m_prefab, transform.position, transform.rotation) as GameObject;
 
@@ -108,7 +108,7 @@ public class GaSystem : MonoBehaviour
         }
     }
 
-    List<Creature> OrderListByDescending(List<Creature> creatures)
+    List<Creature_Genetics> OrderListByDescending(List<Creature_Genetics> creatures)
     {
         return creatures.OrderByDescending(x => x.fitness).ToList();
     }

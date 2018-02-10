@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObjectSelector : MonoBehaviour
 {
     // Update is called once per frame
-    public Creature m_selectedNPC;
+    public Creature_Genetics m_selectedNPC;
 
     void Update()
     {
@@ -19,7 +19,7 @@ public class ObjectSelector : MonoBehaviour
             if (hit)
             {
                 print("Hit : " + hitInfo.transform.gameObject.name);
-                var npc = hitInfo.transform.GetComponent<Creature>();
+                var npc = hitInfo.transform.GetComponent<Creature_Genetics>();
 
                 if (npc != null)
                 {

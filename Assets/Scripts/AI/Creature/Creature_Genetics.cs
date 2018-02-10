@@ -19,7 +19,7 @@ public enum RESPONSES
     MAX_RESPONSES
 }
 
-public class Creature : MonoBehaviour
+public class Creature_Genetics : MonoBehaviour
 {
     public const int NO_OF_CHROMOSOMES = 4;
     //public const int POPULATION_SIZE = 100;
@@ -142,9 +142,9 @@ public class Creature : MonoBehaviour
         //}
     }
 
-    public static Creature Crossover(Creature parent1, Creature parent2)
+    public static Creature_Genetics Crossover(Creature_Genetics parent1, Creature_Genetics parent2)
     {
-        Creature newCreature = new Creature();
+        Creature_Genetics newCreature = new Creature_Genetics();
 
         // TODO: Randomly pick chromosome between parent 1 and 2
         newCreature.m_chromosomes[0] = parent1.m_chromosomes[0];
@@ -157,7 +157,7 @@ public class Creature : MonoBehaviour
         return newCreature;
     }
 
-    public void AssignNewChromosomes(Creature target)
+    public void AssignNewChromosomes(Creature_Genetics target)
     {
         m_chromosomes = target.m_chromosomes;
     }

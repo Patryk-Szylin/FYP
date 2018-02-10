@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public class NPC : MonoBehaviour
+public class Creature_Brain : MonoBehaviour
 {
     public StackFSM m_brain = new StackFSM();
     public float m_speed = 50f;
@@ -12,12 +11,6 @@ public class NPC : MonoBehaviour
 
     private Player _playerTarget;
     private Vector3 _initialPosition;
-
-    public NPC()
-    {
-        m_brain = new StackFSM();
-        m_brain.PushState(idleWalk);
-    }
 
     private void Start()
     {
@@ -55,13 +48,13 @@ public class NPC : MonoBehaviour
             foreach (var collider in colliders)
             {
                 var p = collider.GetComponent<Player>();
-                if(p != null)
+                if (p != null)
                 {
                     print("FOUND A TARGET");
                     _playerTarget = p;
                     m_brain.PushState(Attack);
                 }
-            }                       
+            }
         }
     }
 
@@ -72,14 +65,14 @@ public class NPC : MonoBehaviour
             print("ATTACK");
             var step = m_speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, _playerTarget.transform.position, step);
-            
+
             // If out of range, move back to idle
-            if(Vector3.Distance(transform.position, _playerTarget.transform.position) > m_outOfRangeDistance)
+            if (Vector3.Distance(transform.position, _playerTarget.transform.position) > m_outOfRangeDistance)
             {
                 m_brain.PopState();
                 m_brain.PushState(MoveToInitialPosition);
             }
-            
+
         }
     }
 
@@ -88,11 +81,12 @@ public class NPC : MonoBehaviour
         var step = m_speed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, _initialPosition, step);
 
-        if(transform.position == _initialPosition)
+        if (transform.position == _initialPosition)
         {
             m_brain.PopState();
         }
     }
+
 
 
 }

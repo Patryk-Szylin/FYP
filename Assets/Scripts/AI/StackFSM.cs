@@ -5,14 +5,19 @@ using System;
 
 public class StackFSM : MonoBehaviour
 {
-    private Stack<Action> m_stack = new Stack<Action>();
+    private Stack<Action> m_stack;
 
-
+    public StackFSM()
+    {
+        m_stack = new Stack<Action>();
+    }
 
     public void Update()
     {
         var currentStateFunction = getCurrentState();
-        currentStateFunction();
+
+        if (currentStateFunction != null)
+            currentStateFunction();
     }
 
     public Action PopState()
@@ -22,7 +27,7 @@ public class StackFSM : MonoBehaviour
 
     public void PushState(Action state, object paramas = null)
     {
-        if(getCurrentState() != state)
+        if (getCurrentState() != state)
         {
             m_stack.Push(state);
         }
