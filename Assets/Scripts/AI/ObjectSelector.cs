@@ -26,7 +26,7 @@ public class ObjectSelector : MonoBehaviour
                     print("It's working");
 
                     m_selectedNPC = npc;
-                    UI_Manager.Instance.ShowSelectedNPCStats(m_selectedNPC.m_totalDamageReceived);
+                    UI_Manager.Instance.ShowSelectedNPCStats(m_selectedNPC);
                 }
                 else
                 {

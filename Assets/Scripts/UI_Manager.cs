@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Linq;
 
 public class UI_Manager : MonoBehaviour
 {
@@ -38,7 +39,11 @@ public class UI_Manager : MonoBehaviour
 
     public Text m_creatureName;
     public Text m_creatureDamageTaken;
+    public List<Text> m_chromosomeScenarios = new List<Text>();
+    public List<Text> m_chromosomeResponses = new List<Text>();
 
+    string[] m_chromosomeScenarioSet = new string[4] { "Attacked By Malee", "Attacked by Range", "Attacked by Group", "Healer Present" };
+    string[] m_chromosomeResponseSet = new string[4] { "Retreat", "Hide", "Attack with Blade", "Attack with Magic" };
 
 
     private void Update()
@@ -46,10 +51,19 @@ public class UI_Manager : MonoBehaviour
 
     }
 
-
-    public void ShowSelectedNPCStats(float damageTaken)
+    private void Start()
     {
-        m_creatureDamageTaken.text = damageTaken.ToString();
+
+    }
+
+
+
+
+    public void ShowSelectedNPCStats(Creature_Genetics creature)
+    {
+        m_creatureDamageTaken.text = creature.m_totalDamageReceived.ToString();
+
+
     }
 
 }
