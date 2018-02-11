@@ -39,6 +39,8 @@ public class UI_Manager : MonoBehaviour
 
     public Text m_creatureName;
     public Text m_creatureDamageTaken;
+    public Text m_creatureDamageDealt;
+    public Text m_creatureFitness;
     public List<Text> m_chromosomeScenarios = new List<Text>();
     public List<Text> m_chromosomeResponses = new List<Text>();
 
@@ -53,16 +55,29 @@ public class UI_Manager : MonoBehaviour
 
     private void Start()
     {
-
+        PopulateScenarioTextElements();
     }
 
-
+    public void PopulateScenarioTextElements()
+    {
+        for (int i = 0; i < m_chromosomeScenarios.Count; i++)
+        {
+            m_chromosomeScenarios[i].text = m_chromosomeScenarioSet[i];
+        }
+    }
 
 
     public void ShowSelectedNPCStats(Creature_Genetics creature)
     {
         m_creatureDamageTaken.text = creature.m_totalDamageReceived.ToString();
+        m_creatureDamageDealt.text = creature.m_totalDamageDealt.ToString();
+        m_creatureFitness.text = creature.fitness.ToString();
 
+        for (int i = 0; i < creature.m_chromosomes.Length; i++)
+        {
+            var chromosomeIndex = creature.m_chromosomes[i];
+            m_chromosomeResponses[i].text = m_chromosomeResponseSet[chromosomeIndex];
+        }
 
     }
 
