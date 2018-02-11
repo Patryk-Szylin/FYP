@@ -101,45 +101,12 @@ public class Creature_Genetics : MonoBehaviour
 
     public void sortFitness()
     {
-        float temp;
-
         //for (int i = 0; i < population_size; i++)
         //{
         //    fitness = m_totalDamageDealt / m_totalDamageReceived;
-
         //}
-
 
         this.fitness = m_totalDamageDealt / m_totalDamageReceived;
-
-        //for (int i = (population_size - 1); i >= 0; i--)
-        //{
-        //    for (int j = 1; j <= i; j++)
-        //    {
-        //        var population = GaSystem.Instance.m_creatures;
-        //        if (population[j - 1].fitness < population[j].fitness)
-        //        {
-        //            temp = population[j - 1].fitness;
-        //            population[j - 1].fitness = population[j].fitness;
-        //            population[j].fitness = temp;
-
-        //            temp = population[j - 1].m_totalDamageDealt;
-        //            population[j - 1].m_totalDamageDealt = population[j].m_totalDamageDealt;
-        //            population[j].m_totalDamageDealt = temp;
-
-        //            temp = population[j - 1].m_totalDamageReceived;
-        //            population[j - 1].m_totalDamageReceived = population[j].m_totalDamageReceived;
-        //            population[j].m_totalDamageReceived = temp;
-
-        //            for (int k = 0; k < NO_OF_CHROMOSOMES; k++)
-        //            {
-        //                temp = population[j - 1].m_chromosomes[k];
-        //                population[j - 1].m_chromosomes[k] = population[j].m_chromosomes[k];
-        //                population[j].m_chromosomes[k] = (int)temp;
-        //            }
-        //        }
-        //    }
-        //}
     }
 
     public static Creature_Genetics Crossover(Creature_Genetics parent1, Creature_Genetics parent2)
@@ -147,14 +114,32 @@ public class Creature_Genetics : MonoBehaviour
         Creature_Genetics newCreature = new Creature_Genetics();
 
         // TODO: Randomly pick chromosome between parent 1 and 2
-        newCreature.m_chromosomes[0] = parent1.m_chromosomes[0];
-        newCreature.m_chromosomes[1] = parent2.m_chromosomes[1];
-        newCreature.m_chromosomes[2] = parent1.m_chromosomes[2];
-        newCreature.m_chromosomes[3] = parent2.m_chromosomes[3];
+        List<Creature_Genetics> parents = new List<Creature_Genetics>();
+        parents.Add(parent1);
+        parents.Add(parent2);
+        var randomIndex = Random.Range(0, parents.Count - 1);
+
+
+        // Mutate creature before assigning chromosomes
+        // RandomMutation();
+
+        // Todo: This is temporary CrossOver function and I need to pick parents baseed on fitness.
+        newCreature.m_chromosomes[0] = parents[randomIndex].m_chromosomes[0];
+        newCreature.m_chromosomes[1] = parents[randomIndex].m_chromosomes[1];
+        newCreature.m_chromosomes[2] = parents[randomIndex].m_chromosomes[2];
+        newCreature.m_chromosomes[3] = parents[randomIndex].m_chromosomes[3];
         newCreature.m_totalDamageReceived = 0;
         newCreature.m_totalDamageDealt = 0;
         newCreature.fitness = 0;
         return newCreature;
+    }
+
+
+    public void RandomMutation()
+    {
+        // Do I create a new set of possible behaviours that none of the creatures posses?
+        // This would allow me assign chromosomes to creatrues that are unique, hence mutated creature
+
     }
 
     public void AssignNewChromosomes(Creature_Genetics target)

@@ -83,23 +83,10 @@ public class GaSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            //for (int i = 0; i < m_creatures.Count; i++)
-            //{
-            //    for (int j = i + 1; j < m_creatures.Count; j++)
-            //    {
-            //        //print(m_creatures[i].m_chromosomes[0]);
-
-            //        //var newCreature = m_creatures[i].Crossover(m_creatures[i], m_creatures[j]);
-            //        //m_newCreatures.Add(newCreature);
-            //    }
-            //}
-
             var newCreature = Creature_Genetics.Crossover(m_creatures[0], m_creatures[1]);
             m_prefab.GetComponent<Creature_Genetics>().AssignNewChromosomes(newCreature);
 
             var go = Instantiate(m_prefab, transform.position, transform.rotation) as GameObject;
-
-            //print(newCreature.m_chromosomes[0]);
         }
 
         if (Input.GetKey(KeyCode.Space))
