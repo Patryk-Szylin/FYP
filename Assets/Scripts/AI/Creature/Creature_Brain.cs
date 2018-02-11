@@ -5,12 +5,14 @@ using UnityEngine;
 public class Creature_Brain : MonoBehaviour
 {
     public StackFSM m_brain = new StackFSM();
-    public float m_speed = 50f;
-    public bool m_moveForward = true;
-    public float m_outOfRangeDistance = 25f;
+    public float m_speed = 50f;                     // THIS SHOULD BE IN THE CONTROLLER
+    public bool m_moveForward = true;               // THIS SHOULD BE IN THE CONTROLLER
+    public float m_outOfRangeDistance = 25f;        // THIS SHOULD BE IN THE CONTROLLER
+    public float m_idleMaximumTravelDistance = 10f; // THIS SHOULD BE IN THE CONTROLLER
+    public float m_fieldOfViewRange = 5f;           // THIS SHOULD BE IN THE CONTROLLER
 
-    private Player _playerTarget;
-    private Vector3 _initialPosition;
+    private Player _playerTarget;               // THIS SHOULD BE IN THE CONTROLLER
+    private Vector3 _initialPosition;           // THIS SHOULD BE IN THE CONTROLLER
 
     private void Start()
     {
@@ -26,23 +28,22 @@ public class Creature_Brain : MonoBehaviour
 
         // The position needs to be transformed from World Space to Local Space
         var worldToLocalPos = transform.InverseTransformPoint(_initialPosition);
-        print(worldToLocalPos);
 
         if (m_moveForward)
         {
             transform.Translate(m_speed * Vector3.forward * Time.deltaTime);
-            if (worldToLocalPos.z < -10f)
+            if (worldToLocalPos.z < -m_idleMaximumTravelDistance)
                 m_moveForward = false;
         }
         else
         {
             transform.Translate(m_speed * Vector3.back * Time.deltaTime);
-            if (worldToLocalPos.z > 10f)
+            if (worldToLocalPos.z > m_idleMaximumTravelDistance)
                 m_moveForward = true;
         }
 
         // check for nearby players
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 5f);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, m_fieldOfViewRange);
 
         // iF THERE'S nearby player then transition to state Attack and pass the variable of the player that is nearby
         if (colliders.Length > 0)

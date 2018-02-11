@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
 
     public float m_speed = 15f;
+    public GameObject m_bulletPrefab;
 
     // Update is called once per frame
     void Update()
