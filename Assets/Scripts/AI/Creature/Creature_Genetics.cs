@@ -10,13 +10,20 @@ public enum SCENARIOS
     HEALER_PRESENT
 }
 
+
+// TODO: FOCUS, meaning that if there's a heal
 public enum RESPONSES
 {
     RETREAT = 0,
     HIDE,
     ATTACK_WITH_BLADE,
-    ATTACK_WITH_MAGIC,
+    ATTACK_WITH_PROJECTILE,
     MAX_RESPONSES
+}
+
+public enum RESPONSES_TO_GROUP
+{
+
 }
 
 public class Creature_Genetics : MonoBehaviour
@@ -31,9 +38,9 @@ public class Creature_Genetics : MonoBehaviour
     public float fitness;
 
 
-    public void CreateIndividual(int id)
+    public void CreateIndividual()
     {
-        switch (Random.Range(1, 4))
+        switch (Random.Range(1, 5))
         {
             case 1:
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)RESPONSES.RETREAT;
@@ -45,11 +52,11 @@ public class Creature_Genetics : MonoBehaviour
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)RESPONSES.ATTACK_WITH_BLADE;
                 break;
             case 4:
-                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)RESPONSES.ATTACK_WITH_MAGIC;
+                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)RESPONSES.ATTACK_WITH_PROJECTILE;
                 break;
         }
 
-        switch (Random.Range(1, 4))
+        switch (Random.Range(1, 5))
         {
             case 1:
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)RESPONSES.RETREAT;
@@ -61,12 +68,12 @@ public class Creature_Genetics : MonoBehaviour
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)RESPONSES.ATTACK_WITH_BLADE;
                 break;
             case 4:
-                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)RESPONSES.ATTACK_WITH_MAGIC;
+                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)RESPONSES.ATTACK_WITH_PROJECTILE;
                 break;
         }
 
 
-        switch (Random.Range(1, 4))
+        switch (Random.Range(1, 5))
         {
             case 1:
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)RESPONSES.RETREAT;
@@ -78,11 +85,11 @@ public class Creature_Genetics : MonoBehaviour
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)RESPONSES.ATTACK_WITH_BLADE;
                 break;
             case 4:
-                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)RESPONSES.ATTACK_WITH_MAGIC;
+                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)RESPONSES.ATTACK_WITH_PROJECTILE;
                 break;
         }
 
-        switch (Random.Range(1, 4))
+        switch (Random.Range(1, 5))
         {
             case 1:
                 m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)RESPONSES.RETREAT;
@@ -94,7 +101,7 @@ public class Creature_Genetics : MonoBehaviour
                 m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)RESPONSES.ATTACK_WITH_BLADE;
                 break;
             case 4:
-                m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)RESPONSES.ATTACK_WITH_MAGIC;
+                m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)RESPONSES.ATTACK_WITH_PROJECTILE;
                 break;
         }
     }

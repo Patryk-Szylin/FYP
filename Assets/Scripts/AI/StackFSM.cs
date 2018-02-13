@@ -17,7 +17,12 @@ public class StackFSM : MonoBehaviour
         var currentStateFunction = getCurrentState();
 
         if (currentStateFunction != null)
-            currentStateFunction();
+        {
+            if (currentStateFunction.GetType() == typeof(System.Action))
+            {
+                currentStateFunction();
+            }
+        }
     }
 
     public Action PopState()

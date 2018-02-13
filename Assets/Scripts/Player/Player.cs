@@ -6,7 +6,20 @@ public class Player : MonoBehaviour
 {
 
     public float m_speed = 15f;
-    public GameObject m_bulletPrefab;
+    Player_Ability m_playerAbility;
+    Player_Melee m_pMelee;
+    Player_Range m_pRange;
+    Player_Healer m_pHealer;
+
+
+    private void Start()
+    {
+        m_playerAbility = GetComponent<Player_Ability>();
+        m_pMelee = GetComponent<Player_Melee>();
+        m_pRange = GetComponent<Player_Range>();
+        m_pHealer = GetComponent<Player_Healer>();
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -30,5 +43,22 @@ public class Player : MonoBehaviour
         {
             transform.Translate(m_speed * Vector3.back * Time.deltaTime);
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (m_pRange != null)
+            {
+                m_pRange.ShootProjectile();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if(m_pMelee != null)
+            {
+                m_pMelee.MeleeAttack();
+            }
+        }
+
     }
 }

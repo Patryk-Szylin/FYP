@@ -45,7 +45,7 @@ public class UI_Manager : MonoBehaviour
     public List<Text> m_chromosomeResponses = new List<Text>();
 
     string[] m_chromosomeScenarioSet = new string[4] { "Attacked By Malee", "Attacked by Range", "Attacked by Group", "Healer Present" };
-    string[] m_chromosomeResponseSet = new string[4] { "Retreat", "Hide", "Attack with Blade", "Attack with Magic" };
+    string[] m_chromosomeResponseSet = new string[4] { "Retreat", "Hide", "Attack with Blade", "Attack with Projectile" };
 
 
     private void Update()
