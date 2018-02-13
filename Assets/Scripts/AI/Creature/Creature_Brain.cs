@@ -8,15 +8,23 @@ public class Creature_Brain : MonoBehaviour
     public StackFSM m_brain = new StackFSM();
     public float m_speed = 50f;                     // THIS SHOULD BE IN THE CONTROLLER
     public bool m_moveForward = true;               // THIS SHOULD BE IN THE CONTROLLER
+
+
+
+    [Header("Combat properties")]
     public float m_outOfRangeDistance = 25f;        // THIS SHOULD BE IN THE CONTROLLER
     public float m_idleMaximumTravelDistance = 10f; // THIS SHOULD BE IN THE CONTROLLER
     public float m_fieldOfViewRange = 5f;           // THIS SHOULD BE IN THE CONTROLLER
+    public float m_rangeDamage = 1f;            // SHOULD BE IN SEPERATE COMPONENT
+    public float m_meleeDamage = 1f;            // SHOULD BE IN SEPERATE COMPONENT
+    public float m_meleeRange = 2f;
+    public float m_meleeAttackSpeed = 1f;
+
 
     private Player _playerTarget;               // THIS SHOULD BE IN THE CONTROLLER
     private Vector3 _initialPosition;           // THIS SHOULD BE IN THE CONTROLLER
 
-    public float m_rangeDamage = 1f;            // SHOULD BE IN SEPERATE COMPONENT
-    public float m_meleeDamage = 1f;            // SHOULD BE IN SEPERATE COMPONENT
+
     public Projectile_Creature m_projectilePrefab;
 
     public List<Action> m_behaviours = new List<Action>();
@@ -25,6 +33,10 @@ public class Creature_Brain : MonoBehaviour
     public float m_cooldown;
     public float m_cooldownLeft;
     public float m_nextReadyTime;
+
+    public float m_nextMeleeReadyTime;
+    public float m_meleeCooldown;
+    public float m_meleeCooldownLeft;
 
     private void Start()
     {
@@ -40,8 +52,6 @@ public class Creature_Brain : MonoBehaviour
     }
     public void idleWalk()
     {
-        print("MOVE");
-
         // The position needs to be transformed from World Space to Local Space
         var worldToLocalPos = transform.InverseTransformPoint(_initialPosition);
 
@@ -75,7 +85,7 @@ public class Creature_Brain : MonoBehaviour
                     //m_behaviours[0]();
                     _playerTarget = playerMelee.GetComponent<Player>();
                     m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[0]]);
-                    
+
                 }
 
                 if (playerRange != null)
@@ -98,10 +108,10 @@ public class Creature_Brain : MonoBehaviour
 
         // IF THE COLLIDER HAS A PLAYER MELEE component then execute chromosome response [0]
         // if PLAYER RANGE COMPONENT then execute chromosome[1]
-            /*this could be executed when creature gets hit but it doesnt see the player yet
-             * 
-             * 
-             */
+        /*this could be executed when creature gets hit but it doesnt see the player yet
+         * 
+         * 
+         */
         // If there are multiple Player_ componenets then execute chromosome[2]
         // If there is healer present then execute chromosome[3]
     }
@@ -109,11 +119,17 @@ public class Creature_Brain : MonoBehaviour
     public void Hide()
     {
         print("HIDING");
+        // TODO: Display UI pop up text for now
+
+        CheckIfPlayerOutOfRange();
     }
 
     public void Retreat()
     {
         print("RETREATING");
+        // TODO: Display UI pop up text for now
+
+        CheckIfPlayerOutOfRange();
     }
 
     public void AttackWithProjectile()
@@ -122,7 +138,6 @@ public class Creature_Brain : MonoBehaviour
         {
             var playerPos = _playerTarget.transform.position;
             var dir = (playerPos - transform.position).normalized;
-            print("Shoot");
 
             if (Time.time > m_nextReadyTime)
             {
@@ -145,13 +160,27 @@ public class Creature_Brain : MonoBehaviour
 
     public void Attack()
     {
-        print("ATTACKING");
         print(_playerTarget);
         if (_playerTarget)
         {
-            print("ATTACK");
             var step = m_speed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, _playerTarget.transform.position, step);
+            var playerPos = _playerTarget.transform.position;
+            var distance = Vector3.Distance(playerPos, transform.position);
+
+
+            if (distance >= m_meleeRange)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, _playerTarget.transform.position, step);
+            }
+            else
+            {
+                print("Deal damage to the player");
+                if (Time.time > m_nextMeleeReadyTime)
+                {
+                    _playerTarget.Damage(m_meleeDamage);
+                    m_nextMeleeReadyTime = m_meleeAttackSpeed + Time.time;
+                }
+            }
 
             CheckIfPlayerOutOfRange();
         }

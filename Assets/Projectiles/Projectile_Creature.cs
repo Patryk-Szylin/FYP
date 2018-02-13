@@ -14,6 +14,7 @@ public class Projectile_Creature : MonoBehaviour
         {
             //player.Damage(m_damage);
             print("HIT PLAYER");
+            player.Damage(m_damage);
             Destroy(this.gameObject);
         }
     }

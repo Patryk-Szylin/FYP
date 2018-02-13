@@ -1,11 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
 
-    public float m_speed = 15f;
+    public float m_speed = 15f;                 // SEPERATE IN ANOTHER COMPONENT
+    public float m_currentHealth;               // SEPERATE IN ANOTHER COMPONENT
+    public float m_maxHealth = 5f;              // SEPERATE IN ANOTHER COMPONENT
+    public RectTransform m_healthBar;
+    public bool m_isDead = false;
+    public float m_respawnDelay = 2f;
+    Vector3 _initialPosition;                   // THIS SHOULD BE IN THE CONTROLLER
+
     Player_Ability m_playerAbility;
     Player_Melee m_pMelee;
     Player_Range m_pRange;
@@ -18,6 +26,29 @@ public class Player : MonoBehaviour
         m_pMelee = GetComponent<Player_Melee>();
         m_pRange = GetComponent<Player_Range>();
         m_pHealer = GetComponent<Player_Healer>();
+        m_currentHealth = m_maxHealth;
+        _initialPosition = transform.position;
+    }
+
+    public void Damage(float dmg)
+    {
+        m_currentHealth -= dmg;
+        UpdateHealthBar(m_currentHealth);
+        if (m_currentHealth <= 0 && !m_isDead)
+        {
+            m_isDead = true;
+            SetActiveState(false);
+            StartCoroutine(Respawn());
+        }
+    }
+
+    public void UpdateHealthBar(float value)
+    {
+        if (m_healthBar != null)
+        {
+            print("Update healthbar");
+            m_healthBar.sizeDelta = new Vector2(value / m_maxHealth * 300f, m_healthBar.sizeDelta.y);
+        }
     }
 
 
@@ -60,5 +91,33 @@ public class Player : MonoBehaviour
             }
         }
 
+    }
+
+    IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(m_respawnDelay);
+        transform.position = _initialPosition;
+        m_currentHealth = m_maxHealth;
+        UpdateHealthBar(m_currentHealth);
+        m_isDead = false;
+        SetActiveState(true);
+    }
+
+    void SetActiveState(bool state)
+    {
+        foreach (Collider c in GetComponentsInChildren<Collider>())
+        {
+            c.enabled = state;
+        }
+
+        foreach (Canvas c in GetComponentsInChildren<Canvas>())
+        {
+            c.enabled = state;
+        }
+
+        foreach (Renderer r in GetComponentsInChildren<Renderer>())
+        {
+            r.enabled = state;
+        }
     }
 }
