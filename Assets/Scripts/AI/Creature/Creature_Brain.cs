@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class Creature_Brain : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class Creature_Brain : MonoBehaviour
 
     private Player _playerTarget;               // THIS SHOULD BE IN THE CONTROLLER
     private Vector3 _initialPosition;           // THIS SHOULD BE IN THE CONTROLLER
+    public Text m_popupText;
+    public Vector3 m_lastIdlePosition;
+
 
 
     public Projectile_Creature m_projectilePrefab;
@@ -47,13 +51,13 @@ public class Creature_Brain : MonoBehaviour
         m_behaviours.Add(Hide);
         m_behaviours.Add(Attack);
         m_behaviours.Add(AttackWithProjectile);
-
         m_genetics = GetComponent<Creature_Genetics>();
     }
     public void idleWalk()
     {
         // The position needs to be transformed from World Space to Local Space
         var worldToLocalPos = transform.InverseTransformPoint(_initialPosition);
+        m_lastIdlePosition = transform.position;
 
         if (m_moveForward)
         {
@@ -94,7 +98,6 @@ public class Creature_Brain : MonoBehaviour
                     //m_behaviours[1]();
                     _playerTarget = playerRange.GetComponent<Player>();
                     m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[1]]);
-                    print(m_genetics.m_chromosomes[1]);
                 }
 
                 //if (p != null)
@@ -118,15 +121,23 @@ public class Creature_Brain : MonoBehaviour
 
     public void Hide()
     {
-        print("HIDING");
+        DisplayPopUpText("HIDING!");
         // TODO: Display UI pop up text for now
+
+
 
         CheckIfPlayerOutOfRange();
     }
 
+    public void DisplayPopUpText(string text)
+    {
+        m_popupText.gameObject.SetActive(true);
+        m_popupText.text = text;
+    }
+
     public void Retreat()
     {
-        print("RETREATING");
+        DisplayPopUpText("RETREATING!");
         // TODO: Display UI pop up text for now
 
         CheckIfPlayerOutOfRange();
@@ -189,19 +200,20 @@ public class Creature_Brain : MonoBehaviour
     public void CheckIfPlayerOutOfRange()
     {
         // If out of range, move back to idle
-        if (Vector3.Distance(transform.position, _playerTarget.transform.position) > m_outOfRangeDistance)
+        if (Vector3.Distance(transform.position, _playerTarget.transform.position) > m_outOfRangeDistance && _playerTarget)
         {
             m_brain.PopState();
             m_brain.PushState(MoveToInitialPosition);
+            m_popupText.gameObject.SetActive(false);
         }
     }
 
     public void MoveToInitialPosition()
     {
         var step = m_speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, _initialPosition, step);
+        transform.position = Vector3.MoveTowards(transform.position, m_lastIdlePosition, step);
 
-        if (transform.position == _initialPosition)
+        if (transform.position == m_lastIdlePosition)
         {
             m_brain.PopState();
         }

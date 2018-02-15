@@ -46,7 +46,6 @@ public class Player : MonoBehaviour
     {
         if (m_healthBar != null)
         {
-            print("Update healthbar");
             m_healthBar.sizeDelta = new Vector2(value / m_maxHealth * 300f, m_healthBar.sizeDelta.y);
         }
     }
