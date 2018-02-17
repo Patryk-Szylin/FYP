@@ -8,17 +8,25 @@ public class Creature_IdleSystem : MonoBehaviour
     public float m_speed = 50f;
 
     public Vector3 m_destination;
+    private Creature_Brain m_combatBrain;
 
 
+    public void InitiateIdleSystem()
+    {
+        m_brain.PushState(Walk);
+    }
 
     private void Start()
     {
-        m_brain.PushState(Walk);
+        m_combatBrain = GetComponent<Creature_Brain>();
     }
 
 
     public void Walk()
     {
+        if (m_combatBrain._playerTarget)
+            return;
+
         print("PLAY IDLE ANIMATION");
         var randomPoint = GenerateIdleDestinationPoint();
         m_destination = randomPoint;
@@ -29,14 +37,16 @@ public class Creature_IdleSystem : MonoBehaviour
 
     public void Move()
     {
+        if (m_combatBrain._playerTarget)
+            return;
+
+        print("WALKING...");
         var step = m_speed * Time.deltaTime;
         var dir = (m_destination - transform.position).normalized;
         var newDir = Vector3.RotateTowards(transform.forward, dir, step, 0.0f);
         transform.rotation = Quaternion.LookRotation(new Vector3(newDir.x, 0, newDir.z));
-        transform.position = Vector3.MoveTowards(transform.position, m_destination, step);
-        
+        transform.position = Vector3.MoveTowards(transform.position, m_destination, step);      
 
-        print("WALKING...");
         if (transform.position == m_destination)
         {            
             m_brain.PopState();
@@ -45,17 +55,21 @@ public class Creature_IdleSystem : MonoBehaviour
 
     public Vector3 GenerateIdleDestinationPoint()
     {
-        Vector3[] randomIdleWalkTargetPosiitons = new Vector3[3]
+        Vector3[] randomIdleWalkTargetPosiitons = new Vector3[4]
         {
             transform.position + new Vector3(3,0,3),
-            transform.position + new Vector3(-1,0,-10),
-            transform.position + new Vector3(-5 ,0, 4)
+            transform.position + new Vector3(-1,0,-4),
+            transform.position + new Vector3(1, 0, 4),
+            transform.position + new Vector3(-3, 0, -3)
         };
 
         int randomIndex = UnityEngine.Random.Range(0, randomIdleWalkTargetPosiitons.Length);
 
         return randomIdleWalkTargetPosiitons[randomIndex];
     }
+
+    //public void 
+
 
 
 }
