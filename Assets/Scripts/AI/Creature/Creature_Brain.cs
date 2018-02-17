@@ -9,7 +9,7 @@ public class Creature_Brain : MonoBehaviour
     public StackFSM m_brain = new StackFSM();
     public float m_speed = 50f;                     // THIS SHOULD BE IN THE CONTROLLER
     public bool m_moveForward = true;               // THIS SHOULD BE IN THE CONTROLLER
-
+    public bool m_isWalking = false;
 
 
     [Header("Combat properties")]
@@ -26,7 +26,7 @@ public class Creature_Brain : MonoBehaviour
     private Vector3 _initialPosition;           // THIS SHOULD BE IN THE CONTROLLER
     public Text m_popupText;
     public Vector3 m_lastIdlePosition;
-
+    public List<Player> m_nearbyPlayers = new List<Player>();
 
 
     public Projectile_Creature m_projectilePrefab;
@@ -53,35 +53,64 @@ public class Creature_Brain : MonoBehaviour
         m_behaviours.Add(AttackWithProjectile);
         m_genetics = GetComponent<Creature_Genetics>();
     }
-    public void idleWalk()
+
+    private void Update()
     {
-        // The position needs to be transformed from World Space to Local Space
-        var worldToLocalPos = transform.InverseTransformPoint(_initialPosition);
-        m_lastIdlePosition = transform.position;
-
-        if (m_moveForward)
-        {
-            transform.Translate(m_speed * Vector3.forward * Time.deltaTime);
-            if (worldToLocalPos.z < -m_idleMaximumTravelDistance)
-                m_moveForward = false;
-        }
-        else
-        {
-            transform.Translate(m_speed * Vector3.back * Time.deltaTime);
-            if (worldToLocalPos.z > m_idleMaximumTravelDistance)
-                m_moveForward = true;
-        }
-
+        // The creature needs to constantly check for nearby players
         // check for nearby players
         Collider[] colliders = Physics.OverlapSphere(transform.position, m_fieldOfViewRange);
+        List<Player> players = new List<Player>();
 
-        // iF THERE'S nearby player then transition to state Attack and pass the variable of the player that is nearby
-        if (colliders.Length > 0)
+        foreach (var player in colliders)
         {
-            foreach (var collider in colliders)
+            var p = player.GetComponent<Player>();
+            if (p != null)
             {
-                var playerMelee = collider.GetComponent<Player_Melee>();
-                var playerRange = collider.GetComponent<Player_Range>();
+                players.Add(p);
+            }
+        }
+
+        m_nearbyPlayers = players;
+
+
+
+
+        // If more players pop up into the fight, then react with executing chromosome for fighting vs group
+    }
+
+
+
+    // Use genetic algorithm to also optimize idle behaviour ?
+    // Some creatures could turn around faster or randomly walk to a different points in the map?
+    public void idleWalk()
+    {
+        //// The position needs to be transformed from World Space to Local Space
+        //var worldToLocalPos = transform.InverseTransformPoint(_initialPosition);
+        //m_lastIdlePosition = transform.position;
+        //Quaternion lookRotation;
+
+
+        //if (m_moveForward)
+        //{
+        //    transform.Translate(m_speed * Vector3.forward * Time.deltaTime);
+        //    if (worldToLocalPos.z < -m_idleMaximumTravelDistance)
+        //        m_moveForward = false;
+        //}
+        //else
+        //{
+        //    transform.Translate(m_speed * Vector3.back * Time.deltaTime);
+        //    if (worldToLocalPos.z > m_idleMaximumTravelDistance)
+        //        m_moveForward = true;
+        //}
+
+
+
+        if (m_nearbyPlayers.Count == 1)
+        {
+            foreach (var p in m_nearbyPlayers)
+            {
+                var playerMelee = p.GetComponent<Player_Melee>();
+                var playerRange = p.GetComponent<Player_Range>();
 
                 if (playerMelee != null)
                 {
@@ -89,7 +118,6 @@ public class Creature_Brain : MonoBehaviour
                     //m_behaviours[0]();
                     _playerTarget = playerMelee.GetComponent<Player>();
                     m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[0]]);
-
                 }
 
                 if (playerRange != null)
@@ -99,25 +127,34 @@ public class Creature_Brain : MonoBehaviour
                     _playerTarget = playerRange.GetComponent<Player>();
                     m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[1]]);
                 }
-
-                //if (p != null)
-                //{
-                //    print("FOUND A TARGET");
-                //    _playerTarget = p;
-                //    m_brain.PushState(Attack);
-                //}
             }
+
+            // iF THERE'S nearby player then transition to state Attack and pass the variable of the player that is nearby
+
+            // IF THE COLLIDER HAS A PLAYER MELEE component then execute chromosome response [0]
+            // if PLAYER RANGE COMPONENT then execute chromosome[1]
+            /*this could be executed when creature gets hit but it doesnt see the player yet
+             * 
+             * 
+             */
+            // If there are multiple Player_ componenets then execute chromosome[2]
+            // If there is healer present then execute chromosome[3]
         }
 
-        // IF THE COLLIDER HAS A PLAYER MELEE component then execute chromosome response [0]
-        // if PLAYER RANGE COMPONENT then execute chromosome[1]
-        /*this could be executed when creature gets hit but it doesnt see the player yet
-         * 
-         * 
-         */
-        // If there are multiple Player_ componenets then execute chromosome[2]
-        // If there is healer present then execute chromosome[3]
+        // Then if there's more than one player, then it doesn't matter which type of player it is
+        // Beacuse I'm gonna execute chromosome to respond to group attacks
+        // just check if healer is present
+        if (m_nearbyPlayers.Count > 1)
+        {
+            print("GROUP ENCOUNTERED");
+        }
     }
+
+    public void DetectNearbyPlayers()
+    {
+
+    }
+
 
     public void Hide()
     {
