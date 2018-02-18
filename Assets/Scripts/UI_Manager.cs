@@ -50,11 +50,24 @@ public class UI_Manager : MonoBehaviour
 
     [Header("Create new creature panel variables")]
     public GameObject m_createNewCreaturePanel;
+    [Space]
+    public Text m_creature1DmgTaken;
+    public Text m_creature1DmgDealt;
+    public Text m_creature1Fitness;
+    public List<Text> m_creature1Responses = new List<Text>();
+    [Space]
+    public Text m_creature2DmgTaken;
+    public Text m_creature2DmgDealt;
+    public Text m_creature2Fitness;
+    public List<Text> m_creature2Responses = new List<Text>();
+    [Space]
+    public List<Text> m_newCreatureResponses = new List<Text>();
 
-    private void Update()
-    {
 
-    }
+    private Creature_Genetics _creature1;
+    private Creature_Genetics _creature2;
+    public Creature_Genetics m_newCreature;
+
 
     public void ToggleCreateNewCreaturePanel()
     {
@@ -84,7 +97,6 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-
     public void ShowSelectedNPCStats(Creature_Genetics creature)
     {
         m_creatureDamageTaken.text = creature.m_totalDamageReceived.ToString();
@@ -96,8 +108,64 @@ public class UI_Manager : MonoBehaviour
             var chromosomeIndex = creature.m_chromosomes[i];
             m_chromosomeResponses[i].text = m_chromosomeResponseSet[chromosomeIndex];
         }
+    }
+
+
+    public void DisplayCreature1()
+    {
+        var creature = GaSystem.Instance.GetRandomCreature();
+        m_creature1DmgDealt.text = creature.m_totalDamageDealt.ToString();
+        m_creature1DmgTaken.text = creature.m_totalDamageReceived.ToString();
+        m_creature1Fitness.text = creature.fitness.ToString();
+
+        for (int i = 0; i < creature.m_chromosomes.Length; i++)
+        {
+            var chromosomeIndex = creature.m_chromosomes[i];
+            m_creature1Responses[i].text = m_chromosomeResponseSet[chromosomeIndex];
+        }
+        _creature1 = creature;
+    }
+
+    public void DisplayCreature2()
+    {
+        var creature = GaSystem.Instance.GetRandomCreature();
+        m_creature2DmgDealt.text = creature.m_totalDamageDealt.ToString();
+        m_creature2DmgTaken.text = creature.m_totalDamageReceived.ToString();
+        m_creature2Fitness.text = creature.fitness.ToString();
+
+        for (int i = 0; i < creature.m_chromosomes.Length; i++)
+        {
+            var chromosomeIndex = creature.m_chromosomes[i];
+            m_creature2Responses[i].text = m_chromosomeResponseSet[chromosomeIndex];
+        }
+
+        _creature2 = creature;
+    }
+
+    public void SpawnNewCreature()
+    {
+
+        GaSystem.Instance.SpawnNewCreature(m_newCreature);
 
     }
+
+    public void GenerateNewCreature()
+    {
+        if (_creature1 && _creature2)
+        {
+            GaSystem.Instance.GenerateNewCreature(_creature1, _creature2);
+            print("GENERATED NEW CREATURE");
+            for (int i = 0; i < m_newCreature.m_chromosomes.Length; i++)
+            {
+                var chromosomeIndex = m_newCreature.m_chromosomes[i];
+                m_newCreatureResponses[i].text = m_chromosomeResponseSet[chromosomeIndex];
+            }
+        }
+
+    }
+
+
+
 
 }
 

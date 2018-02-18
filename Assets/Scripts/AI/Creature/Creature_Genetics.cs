@@ -37,7 +37,6 @@ public class Creature_Genetics : MonoBehaviour
     public float m_totalDamageReceived;
     public float fitness;
 
-
     public void CreateIndividual()
     {
         switch (Random.Range(1, 5))
@@ -151,6 +150,21 @@ public class Creature_Genetics : MonoBehaviour
 
     public void AssignNewChromosomes(Creature_Genetics target)
     {
-        m_chromosomes = target.m_chromosomes;
+        for (int i = 0; i < m_chromosomes.Length; i++)
+        {
+            m_chromosomes[i] = target.m_chromosomes[i];
+        }
+    }
+
+    public Creature_Genetics AssignChromosomes(Creature_Genetics fromTarget)
+    {
+        Creature_Genetics newCreature = new Creature_Genetics();
+
+        for (int i = 0; i < m_chromosomes.Length; i++)
+        {
+            newCreature.m_chromosomes[i] = fromTarget.m_chromosomes[i];
+        }
+
+        return newCreature;
     }
 }

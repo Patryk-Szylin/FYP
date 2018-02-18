@@ -100,5 +100,29 @@ public class GaSystem : MonoBehaviour
         return creatures.OrderByDescending(x => x.fitness).ToList();
     }
 
+    public List<Creature_Genetics> GetCreatures()
+    {
+        return m_creatures;
+    }
+
+    public Creature_Genetics GetRandomCreature()
+    {
+        Creature_Genetics randomCreature;
+        var randomIndex = Random.Range(0, m_creatures.Count - 1);
+        randomCreature = m_creatures[randomIndex];
+        return randomCreature;
+    }
+
+    public void GenerateNewCreature(Creature_Genetics parent1, Creature_Genetics parent2)
+    {
+        var newCreature = Creature_Genetics.Crossover(parent1, parent2);
+        UI_Manager.Instance.m_newCreature = newCreature;
+    }
+
+    public void SpawnNewCreature(Creature_Genetics newCreature)
+    {
+        m_prefab.GetComponent<Creature_Genetics>().AssignNewChromosomes(newCreature);
+        var go = Instantiate(m_prefab, transform.position, transform.rotation) as GameObject;
+    }
 
 }
