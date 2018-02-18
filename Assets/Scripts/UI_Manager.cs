@@ -53,6 +53,12 @@ public class UI_Manager : MonoBehaviour
 
     }
 
+    public void ToggleCreateNewCreaturePanel()
+    {
+
+    }
+
+
     private void Start()
     {
         PopulateScenarioTextElements();
