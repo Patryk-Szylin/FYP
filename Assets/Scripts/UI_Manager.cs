@@ -48,6 +48,9 @@ public class UI_Manager : MonoBehaviour
     string[] m_chromosomeResponseSet = new string[4] { "Retreat", "Hide", "Attack with Blade", "Attack with Projectile" };
 
 
+    [Header("Create new creature panel variables")]
+    public GameObject m_createNewCreaturePanel;
+
     private void Update()
     {
 
@@ -55,7 +58,16 @@ public class UI_Manager : MonoBehaviour
 
     public void ToggleCreateNewCreaturePanel()
     {
+        if (m_createNewCreaturePanel.activeSelf == true)
+            return;
 
+        m_createNewCreaturePanel.SetActive(true);
+    }
+
+    public void TurnOffNewCreaturePanel()
+    {
+        if (m_createNewCreaturePanel.activeSelf)
+            m_createNewCreaturePanel.SetActive(false);
     }
 
 
