@@ -8,7 +8,8 @@ public class Creature_IdleSystem : MonoBehaviour
     public float m_speed = 50f;
 
     public Vector3 m_destination;
-    private Creature_Brain m_combatBrain;
+    private Creature_AttackSystem m_attackSystem;
+    private Creature_Brain m_brainSystem;
 
 
     public void InitiateIdleSystem()
@@ -18,13 +19,14 @@ public class Creature_IdleSystem : MonoBehaviour
 
     private void Start()
     {
-        m_combatBrain = GetComponent<Creature_Brain>();
-    }
+        m_attackSystem = GetComponent<Creature_AttackSystem>();
+        m_brainSystem = GetComponent<Creature_Brain>();
+}
 
 
     public void Walk()
     {
-        if (m_combatBrain._playerTarget)
+        if (m_brainSystem._playerTarget)
             return;
 
         print("PLAY IDLE ANIMATION");
@@ -37,7 +39,7 @@ public class Creature_IdleSystem : MonoBehaviour
 
     public void Move()
     {
-        if (m_combatBrain._playerTarget)
+        if (m_brainSystem._playerTarget)
             return;
 
         print("WALKING...");

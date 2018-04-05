@@ -6,13 +6,10 @@ using UnityEngine.UI;
 
 public class Creature_Brain : MonoBehaviour
 {
+    // Finite State Machine reference
     public StackFSM m_brain = new StackFSM();
-    public float m_speed = 2f;                     // THIS SHOULD BE IN THE CONTROLLER
-    public float m_chaseSpeed = 5f;
-    public bool m_moveForward = true;               // THIS SHOULD BE IN THE CONTROLLER
-    public bool m_isWalking = false;
 
-
+    // attack attributes
     [Header("Combat properties")]
     public float m_outOfRangeDistance = 25f;        // THIS SHOULD BE IN THE CONTROLLER
     public float m_idleMaximumTravelDistance = 10f; // THIS SHOULD BE IN THE CONTROLLER
@@ -22,28 +19,35 @@ public class Creature_Brain : MonoBehaviour
     public float m_meleeRange = 2f;
     public float m_meleeAttackSpeed = 2.2f;
 
-
-    public Player _playerTarget;               // THIS SHOULD BE IN THE CONTROLLER
-    private Vector3 _initialPosition;           // THIS SHOULD BE IN THE CONTROLLER
-    public Text m_popupText;
-    public Vector3 m_lastIdlePosition;
-    public List<Player> m_nearbyPlayers = new List<Player>();
-
-
-    public Projectile_Creature m_projectilePrefab;
-
-    public List<Action> m_behaviours = new List<Action>();
-    private Creature_Genetics m_genetics;
-    private Creature_MovementSystem m_movementSystem;
-    private Creature_IdleSystem m_idleSystem;
-
+    // Range attributes
+    // stats
     public float m_cooldown;
     public float m_cooldownLeft;
     public float m_nextReadyTime;
 
+
+    public Player _playerTarget;               // THIS SHOULD BE IN THE CONTROLLER
+
     public float m_nextMeleeReadyTime;
     public float m_meleeCooldown;
     public float m_meleeCooldownLeft;
+
+    // Respawn-related variables
+    private Vector3 _initialPosition;           // THIS SHOULD BE IN THE CONTROLLER
+    public Vector3 m_lastIdlePosition;
+
+    // Others 
+    public List<Action> m_behaviours = new List<Action>();
+
+    // Related component references    
+    public Projectile_Creature m_projectilePrefab;
+    private Creature_Genetics m_genetics;
+    private Creature_MovementSystem m_movementSystem;
+    private Creature_IdleSystem m_idleSystem;
+
+
+    public Text m_popupText;
+    public List<Player> m_nearbyPlayers = new List<Player>();
 
 
     // ANIMATIONS
@@ -63,11 +67,12 @@ public class Creature_Brain : MonoBehaviour
         m_idleSystem.InitiateIdleSystem();
         m_brain.PushState(IdleState);
         _initialPosition = transform.position;
+
+        // Populate response behaviours 
         m_behaviours.Add(Retreat);
         m_behaviours.Add(Hide);
         m_behaviours.Add(Attack);
         m_behaviours.Add(AttackWithProjectile);
-
     }
 
     private void Update()
@@ -166,7 +171,7 @@ public class Creature_Brain : MonoBehaviour
         {
             var playerPos = _playerTarget.transform.position;
             var dir = (playerPos - transform.position).normalized;
-            var step = m_speed * Time.deltaTime;
+            var step = m_movementSystem.m_speed * Time.deltaTime;
             var newDir = Vector3.RotateTowards(transform.forward, dir, step, 0.0f);
             transform.rotation = Quaternion.LookRotation(new Vector3(newDir.x, 0, newDir.z));
 
@@ -195,12 +200,12 @@ public class Creature_Brain : MonoBehaviour
         print(_playerTarget);
         if (_playerTarget)
         {
-            var step = m_chaseSpeed * Time.deltaTime;
+            var step = m_movementSystem.m_chaseSpeed * Time.deltaTime;
             var playerPos = _playerTarget.transform.position;
             var distance = Vector3.Distance(playerPos, transform.position);
             var dir = (playerPos - transform.position).normalized;
             var newDir = Vector3.RotateTowards(transform.forward, dir, step, 0.0f);
-            
+
 
             if (distance >= m_meleeRange)
             {
@@ -247,7 +252,7 @@ public class Creature_Brain : MonoBehaviour
 
     public void MoveToInitialPosition()
     {
-        var step = m_speed * Time.deltaTime;
+        var step = m_movementSystem.m_speed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, m_lastIdlePosition, step);
 
         if (transform.position == m_lastIdlePosition)

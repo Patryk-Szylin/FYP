@@ -116,7 +116,8 @@ public class GaSystem : MonoBehaviour
     public void GenerateNewCreature(Creature_Genetics parent1, Creature_Genetics parent2)
     {
         var newCreature = Creature_Genetics.Crossover(parent1, parent2);
-        UI_Manager.Instance.m_newCreature = newCreature;
+        var mutatedCreature = Creature_Genetics.RandomMutation(newCreature);
+        UI_Manager.Instance.m_newCreature = mutatedCreature;
     }
 
     public void SpawnNewCreature(Creature_Genetics newCreature)

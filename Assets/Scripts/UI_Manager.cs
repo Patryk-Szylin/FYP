@@ -45,7 +45,19 @@ public class UI_Manager : MonoBehaviour
     public List<Text> m_chromosomeResponses = new List<Text>();
 
     string[] m_chromosomeScenarioSet = new string[4] { "Attacked By Malee", "Attacked by Range", "Attacked by Group", "Healer Present" };
-    string[] m_chromosomeResponseSet = new string[4] { "Retreat", "Hide", "Attack with Blade", "Attack with Projectile" };
+    string[] m_chromosomeResponseSet = new string[10] 
+    {
+        "Attack using Normal Blade",
+        "Attack using Normal Projectile",
+        "Attack using Fire Blade",
+        "Attack using Fire Projectile",
+        "Attack using Fire Magic",
+        "Attack using Ice Blade",
+        "Attack using Ice Projectile",
+        "Attack using Ice Magic",
+        "Block attacks",
+        "Defend using Resistance Buff"        
+    };
 
 
     [Header("Create new creature panel variables")]
