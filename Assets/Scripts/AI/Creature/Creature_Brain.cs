@@ -3,11 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using System.Linq;
 
 public class Creature_Brain : MonoBehaviour
 {
     // Finite State Machine reference
     public StackFSM m_brain = new StackFSM();
+
+    // Prefabs
+    public Projectile_Creature m_projectilePrefab;
+    public Projectile_Creature m_fireProjectilePrefab;
+    public Projectile_Creature m_iceProjectilePrefab;
+    public Material m_fireBlade;
+    public Material m_fireBody;
+    public Material m_fireBodyArmor;
+    public Material m_iceBlade;
+    public Material m_iceBody;
+    public Material m_iceBodyArmor;
+    public SkinnedMeshRenderer m_bladeMesh;
+    public SkinnedMeshRenderer m_bodyMesh;
+    public GameObject m_bladeFireEffect;
 
     // attack attributes
     [Header("Combat properties")]
@@ -40,7 +55,8 @@ public class Creature_Brain : MonoBehaviour
     public List<Action> m_behaviours = new List<Action>();
 
     // Related component references    
-    public Projectile_Creature m_projectilePrefab;
+    private SkinnedMeshRenderer m_mesh;
+   
     private Creature_Genetics m_genetics;
     private Creature_MovementSystem m_movementSystem;
     private Creature_IdleSystem m_idleSystem;
@@ -62,6 +78,7 @@ public class Creature_Brain : MonoBehaviour
         m_movementSystem = GetComponent<Creature_MovementSystem>();
         m_idleSystem = GetComponent<Creature_IdleSystem>();
         m_anim = GetComponentInChildren<Animator>();
+        m_mesh = GetComponentInChildren<SkinnedMeshRenderer>();
 
         _playerTarget = null;
         m_idleSystem.InitiateIdleSystem();
@@ -69,10 +86,14 @@ public class Creature_Brain : MonoBehaviour
         _initialPosition = transform.position;
 
         // Populate response behaviours 
-        m_behaviours.Add(Retreat);
-        m_behaviours.Add(Hide);
-        m_behaviours.Add(Attack);
+        m_behaviours.Add(AttackWithBlade);
         m_behaviours.Add(AttackWithProjectile);
+        m_behaviours.Add(AttackWithBlade);
+        m_behaviours.Add(AttackWithProjectile);
+        m_behaviours.Add(AttackWithMagic);
+        m_behaviours.Add(AttackWithBlade);
+        m_behaviours.Add(AttackWithProjectile);
+        m_behaviours.Add(AttackWithMagic);
     }
 
     private void Update()
@@ -98,10 +119,109 @@ public class Creature_Brain : MonoBehaviour
 
         m_nearbyPlayers = players;
 
+        // Use different textures based on the creature's ability skills
+        // THIS SHOULD BE IN THE START FUNCTION
+        // The only reason this is in update is so I can switch chromosmes at runtime
+        ChangeCreatureTextures();
+
+
         // If more players pop up into the fight, then react with executing chromosome for fighting vs group
     }
 
 
+    public void ChangeCreatureTextures()
+    {
+        int fireCounter = 0;
+        int iceCounter = 0;
+        for (int i = 0; i < m_genetics.m_chromosomes.Length; i++)
+        {
+            if (m_genetics.m_chromosomes[i] == 2 || m_genetics.m_chromosomes[i] == 3 || m_genetics.m_chromosomes[i] == 4)
+                fireCounter++;
+
+            if (m_genetics.m_chromosomes[i] == 5 || m_genetics.m_chromosomes[i] == 6 || m_genetics.m_chromosomes[i] == 7)
+                iceCounter++;
+        }
+
+        switch (fireCounter)
+        {
+            case 0:
+                // do nothing
+                m_bladeFireEffect.SetActive(false);
+                break;
+            case 1:
+                // Equip texture with fire blade
+                m_bladeMesh.material = m_fireBlade;
+                m_bladeFireEffect.SetActive(true);
+                break;
+            case 2:
+                // Equip texture with fire blade + fire eyes + head
+                m_bladeMesh.material = m_fireBlade;
+                m_bodyMesh.material = m_fireBlade;
+                m_bladeFireEffect.SetActive(false);
+                break;
+            case 3:
+                // Equip texture with fire blade + fire eyes + head + fire armor
+                m_bladeMesh.material = m_fireBlade;
+                m_bodyMesh.material = m_fireBody;
+                m_bladeFireEffect.SetActive(false);
+                break;
+            case 4:
+                // Equip texture with fire skeleton + particle effect
+                m_bladeMesh.material = m_fireBlade;
+                m_bodyMesh.material = m_fireBodyArmor;
+                m_bladeFireEffect.SetActive(true);
+                break;
+        }
+
+        switch (iceCounter)
+        {
+            case 0:
+                // do nothing
+                //m_bladeFireEffect.SetActive(false);
+                break;
+            case 1:
+                // Equip texture with fire blade
+                m_bladeMesh.material = m_iceBlade;
+                //m_bladeFireEffect.SetActive(false);
+                break;
+            case 2:
+                // Equip texture with fire blade + fire eyes + head
+                m_bladeMesh.material = m_iceBlade;
+                m_bodyMesh.material = m_iceBlade;
+                //m_bladeFireEffect.SetActive(false);
+                break;
+            case 3:
+                // Equip texture with fire blade + fire eyes + head + fire armor
+                m_bladeMesh.material = m_iceBlade;
+                m_bodyMesh.material = m_iceBody;
+                //m_bladeFireEffect.SetActive(false);
+                break;
+            case 4:
+                // Equip texture with fire skeleton + particle effect
+                m_bladeMesh.material = m_iceBlade;
+                m_bodyMesh.material = m_iceBodyArmor;
+                //m_bladeFireEffect.SetActive(true);
+                break;
+        }
+
+
+        // If there is at least one fire texture across chromosomes then add texture with fire blade
+
+        // 2 fire chromosomes: texture with fire blade and fire eyes + head
+
+        // 3 fire chromosomes: texture with fire blade + fire eyes + head and fire armor
+
+        // 4 fire chromosomes: everything in fire + fire particle effect
+
+
+
+
+        //if (m_genetics.m_chromosomes[1] == 3)
+        //{
+        //    //go = Instantiate(m_projectilePrefab, transform.position, Quaternion.identity);
+        //    m_bladeMesh.material = m_fireBody;
+        //}
+    }
 
     // Use genetic algorithm to also optimize idle behaviour ?
     // Some creatures could turn around faster or randomly walk to a different points in the map?
@@ -117,7 +237,6 @@ public class Creature_Brain : MonoBehaviour
                 if (playerMelee != null)
                 {
                     print("FOUND MELEE");
-                    //m_behaviours[0]();
                     _playerTarget = playerMelee.GetComponent<Player>();
                     m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[0]]);
                 }
@@ -165,37 +284,121 @@ public class Creature_Brain : MonoBehaviour
         CheckIfPlayerOutOfRange();
     }
 
-    public void AttackWithProjectile()
+
+
+
+
+    public void Attack(SCENARIOS scenario, int attackType)
     {
         if (_playerTarget)
         {
+            var step = m_movementSystem.m_chaseSpeed * Time.deltaTime;
             var playerPos = _playerTarget.transform.position;
+            var distance = Vector3.Distance(playerPos, transform.position);
             var dir = (playerPos - transform.position).normalized;
-            var step = m_movementSystem.m_speed * Time.deltaTime;
             var newDir = Vector3.RotateTowards(transform.forward, dir, step, 0.0f);
-            transform.rotation = Quaternion.LookRotation(new Vector3(newDir.x, 0, newDir.z));
 
-            if (Time.time > m_nextReadyTime)
+
+
+            switch (attackType)
             {
-                // Play attacking animation
-                ShootProjectile(dir);
-                m_nextReadyTime = m_cooldown + Time.time;
+                case 1:
+                    // Attack with normal blade
+                    break;
+                case 2:
+                    // Attack with normal projectile
+                    break;
+                case 3:
+                    // Attack with fire blade
+                    break;
+                case 4:
+                    // Attakc with fire projectile
+                    break;
+                case 5:
+                    // Attack with fire magic
+                    break;
+                case 6:
+                    // Attack with ice blade
+                    break;
+                case 7:
+                    // Attack with ice projectile
+                    break;
+                case 8:
+                    // Attack with ice magic
+                    break;
             }
+        }
 
-            CheckIfPlayerOutOfRange();
+
+        // Check what attack response is in chromosomes
+
+        // If player target, Check what player type it is 
+
+
+        // Execute appropriate attack when seeing the player
+
+    }
+
+
+    public void CheckIfPlayerOutOfRange()
+    {
+        // If out of range, move back to idle
+        if (Vector3.Distance(transform.position, _playerTarget.transform.position) > m_outOfRangeDistance && _playerTarget)
+        {
+            // Set animation's bool in range to false
+            m_anim.SetBool("playerInRange", false);
+            m_anim.SetBool("IsAttacking", false);
+            m_brain.PopState();
+            //m_brain.PushState(MoveToInitialPosition);
+            m_idleSystem.InitiateIdleSystem();
+            _playerTarget = null;
+            m_popupText.gameObject.SetActive(false);
+        }
+    }
+
+    public void MoveToInitialPosition()
+    {
+        var step = m_movementSystem.m_speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, m_lastIdlePosition, step);
+
+        if (transform.position == m_lastIdlePosition)
+        {
+            m_brain.PopState();
         }
     }
 
 
 
+    #region ATTACK_BEHAVIOURS
     public void ShootProjectile(Vector3 dir)
     {
-        var go = Instantiate(m_projectilePrefab, transform.position, Quaternion.identity);
+        Projectile_Creature go = new Projectile_Creature();
+
+        if (m_genetics.m_chromosomes[1] == 1)
+        {
+            go = Instantiate(m_projectilePrefab, transform.position, Quaternion.identity);
+        }
+        else if (m_genetics.m_chromosomes[1] == 3)  // If the response is to shoot fire projectile
+        {
+            go = Instantiate(m_fireProjectilePrefab, transform.position, Quaternion.identity);
+            m_mesh.materials[0] = m_fireBody;
+        }
+        else if (m_genetics.m_chromosomes[1] == 6)  // If the response is to shoot ice projectile
+        {
+            go = Instantiate(m_iceProjectilePrefab, transform.position, Quaternion.identity);
+        }
+
         go.m_damage = m_rangeDamage;
         go.GetComponent<Rigidbody>().AddForce(dir * 1500f);
     }
 
-    public void Attack()
+    public void ShootMagic(Vector3 targetPos)
+    {
+
+    }
+
+
+    public void AttackWithBlade()
     {
         print(_playerTarget);
         if (_playerTarget)
@@ -234,33 +437,43 @@ public class Creature_Brain : MonoBehaviour
         }
     }
 
-    public void CheckIfPlayerOutOfRange()
+    public void AttackWithProjectile()
     {
-        // If out of range, move back to idle
-        if (Vector3.Distance(transform.position, _playerTarget.transform.position) > m_outOfRangeDistance && _playerTarget)
+        if (_playerTarget)
         {
-            // Set animation's bool in range to false
-            m_anim.SetBool("playerInRange", false);
-            m_anim.SetBool("IsAttacking", false);
-            m_brain.PopState();
-            //m_brain.PushState(MoveToInitialPosition);
-            m_idleSystem.InitiateIdleSystem();
-            _playerTarget = null;
-            m_popupText.gameObject.SetActive(false);
+            var playerPos = _playerTarget.transform.position;
+            var dir = (playerPos - transform.position).normalized;
+            var step = m_movementSystem.m_speed * Time.deltaTime;
+            var newDir = Vector3.RotateTowards(transform.forward, dir, step, 0.0f);
+            transform.rotation = Quaternion.LookRotation(new Vector3(newDir.x, 0, newDir.z));
+
+            if (Time.time > m_nextReadyTime)
+            {
+                // Play attacking animation
+                ShootProjectile(dir);
+                m_nextReadyTime = m_cooldown + Time.time;
+            }
+
+            CheckIfPlayerOutOfRange();
         }
     }
 
-    public void MoveToInitialPosition()
+    public void AttackWithMagic()
     {
-        var step = m_movementSystem.m_speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, m_lastIdlePosition, step);
 
-        if (transform.position == m_lastIdlePosition)
-        {
-            m_brain.PopState();
-        }
+        DisplayPopUpText("Attacking with Magic!");
+        // TODO: Display UI pop up text for now
+
+
+
+        CheckIfPlayerOutOfRange();
+
     }
 
+
+
+
+    #endregion
 
 
 }

@@ -2,13 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SCENARIOS
-{
-    ATTACKED_BY_MALEE = 0,
-    ATTACKED_BY_RANGE,
-    ATTACKED_BY_GROUP,
-    HEALER_PRESENT
-}
+
 
 //// TODO: FOCUS, meaning that if there's a heal
 //public enum RESPONSES
@@ -19,6 +13,14 @@ public enum SCENARIOS
 //    ATTACK_WITH_PROJECTILE,
 //    MAX_RESPONSES
 //}
+
+public enum SCENARIOS
+{
+    ATTACKED_BY_MALEE = 0,
+    ATTACKED_BY_RANGE,
+    ATTACKED_BY_GROUP,
+    HEALER_PRESENT
+}
 
 public enum RESPONSES
 {
@@ -60,7 +62,7 @@ public class Creature_Genetics : MonoBehaviour
 
     public void CreateIndividual()
     {
-        switch (Random.Range(1, 11))
+        switch (Random.Range(1, 9))
         {
             case 1:
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_BLADE;
@@ -86,16 +88,16 @@ public class Creature_Genetics : MonoBehaviour
             case 8:
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_MAGIC;
                 break;
-            case 9:
-                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)DEFEND_RESPONSES.BLOCK;
-                break;
-            case 10:
-                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)DEFEND_RESPONSES.RESISTANCE_BUFF;
-                break;
+            //case 9:
+            //    m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)DEFEND_RESPONSES.BLOCK;
+            //    break;
+            //case 10:
+            //    m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)DEFEND_RESPONSES.RESISTANCE_BUFF;
+            //    break;
 
         }
 
-        switch (Random.Range(1, 11))
+        switch (Random.Range(1, 9))
         {
             case 1:
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_BLADE;
@@ -121,12 +123,12 @@ public class Creature_Genetics : MonoBehaviour
             case 8:
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_MAGIC;
                 break;
-            case 9:
-                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)DEFEND_RESPONSES.BLOCK;
-                break;
-            case 10:
-                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)DEFEND_RESPONSES.RESISTANCE_BUFF;
-                break;
+            //case 9:
+            //    m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)DEFEND_RESPONSES.BLOCK;
+            //    break;
+            //case 10:
+            //    m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)DEFEND_RESPONSES.RESISTANCE_BUFF;
+            //    break;
         }
 
 

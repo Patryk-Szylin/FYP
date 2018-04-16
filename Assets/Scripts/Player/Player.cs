@@ -84,8 +84,10 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            
             if(m_pMelee != null)
             {
+                print("Attackign");
                 m_pMelee.MeleeAttack();
             }
         }
