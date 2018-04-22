@@ -132,7 +132,7 @@ public class Creature_Genetics : MonoBehaviour
         }
 
 
-        switch (Random.Range(1, 11))
+        switch (Random.Range(1, 9))
         {
             case 1:
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_BLADE;
@@ -158,15 +158,15 @@ public class Creature_Genetics : MonoBehaviour
             case 8:
                 m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_MAGIC;
                 break;
-            case 9:
-                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)DEFEND_RESPONSES.BLOCK;
-                break;
-            case 10:
-                m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)DEFEND_RESPONSES.RESISTANCE_BUFF;
-                break;
+            //case 9:
+            //    m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)DEFEND_RESPONSES.BLOCK;
+            //    break;
+            //case 10:
+            //    m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)DEFEND_RESPONSES.RESISTANCE_BUFF;
+            //    break;
         }
 
-        switch (Random.Range(1, 11))
+        switch (Random.Range(1, 9))
         {
             case 1:
                 m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_BLADE;
@@ -192,12 +192,12 @@ public class Creature_Genetics : MonoBehaviour
             case 8:
                 m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_MAGIC;
                 break;
-            case 9:
-                m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)DEFEND_RESPONSES.BLOCK;
-                break;
-            case 10:
-                m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)DEFEND_RESPONSES.RESISTANCE_BUFF;
-                break;
+            //case 9:
+            //    m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)DEFEND_RESPONSES.BLOCK;
+            //    break;
+            //case 10:
+            //    m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)DEFEND_RESPONSES.RESISTANCE_BUFF;
+            //    break;
         }
     }
 
@@ -225,21 +225,14 @@ public class Creature_Genetics : MonoBehaviour
         // Mutate creature before assigning chromosomes
         // RandomMutation();
 
+        print(parent1);
+        print(parent2);
         // Todo: This is temporary CrossOver function and I need to pick parents baseed on fitness.
         newCreature.m_chromosomes[0] = parents[randomIndex].m_chromosomes[0];
         newCreature.m_chromosomes[1] = parents[randomIndex].m_chromosomes[1];
         newCreature.m_chromosomes[2] = parents[randomIndex].m_chromosomes[2];
         newCreature.m_chromosomes[3] = parents[randomIndex].m_chromosomes[3];
-        newCreature.m_chromosomes[4] = parents[randomIndex].m_chromosomes[4];
-        newCreature.m_chromosomes[5] = parents[randomIndex].m_chromosomes[5];
-        newCreature.m_chromosomes[6] = parents[randomIndex].m_chromosomes[6];
-        newCreature.m_chromosomes[7] = parents[randomIndex].m_chromosomes[7];
-        newCreature.m_chromosomes[8] = parents[randomIndex].m_chromosomes[8];
-        newCreature.m_chromosomes[9] = parents[randomIndex].m_chromosomes[9];
-        newCreature.m_chromosomes[10] = parents[randomIndex].m_chromosomes[10];
-        newCreature.m_chromosomes[11] = parents[randomIndex].m_chromosomes[11];
-
-
+        
         newCreature.m_totalDamageReceived = 0;
         newCreature.m_totalDamageDealt = 0;
         newCreature.fitness = 0;
@@ -254,82 +247,130 @@ public class Creature_Genetics : MonoBehaviour
 
         Creature_Genetics newCreature = new Creature_Genetics();
 
-        //if (Random.value < 0.05)
-        //{
-        //    print("GENERATING CREATURE WITH MUTATION");
-        //    switch (Random.Range(1, 5))
-        //    {
-        //        case 1:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)RESPONSES.RETREAT;
-        //            break;
-        //        case 2:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)RESPONSES.HIDE;
-        //            break;
-        //        case 3:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)RESPONSES.ATTACK_WITH_STEELBLADE;
-        //            break;
-        //        case 4:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)RESPONSES.ATTACK_WITH_PROJECTILE;
-        //            break;
-        //    }
+        if (Random.value < 0.1)
+        {
+            print("GENERATING CREATURE WITH MUTATION");
+            switch (Random.Range(1, 9))
+            {
+                case 1:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_BLADE;
+                    break;
+                case 2:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_PROJECTILE;
+                    break;
+                case 3:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_BLADE;
+                    break;
+                case 4:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_PROJECTILE;
+                    break;
+                case 5:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_MAGIC;
+                    break;
+                case 6:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_BLADE;
+                    break;
+                case 7:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_PROJECTILE;
+                    break;
+                case 8:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_MALEE] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_MAGIC;
+                    break;
+            }
 
-        //    switch (Random.Range(1, 5))
-        //    {
-        //        case 1:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)RESPONSES.RETREAT;
-        //            break;
-        //        case 2:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)RESPONSES.HIDE;
-        //            break;
-        //        case 3:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)RESPONSES.ATTACK_WITH_STEELBLADE;
-        //            break;
-        //        case 4:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)RESPONSES.ATTACK_WITH_PROJECTILE;
-        //            break;
-        //    }
+            switch (Random.Range(1, 9))
+            {
+                case 1:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_BLADE;
+                    break;
+                case 2:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_PROJECTILE;
+                    break;
+                case 3:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_BLADE;
+                    break;
+                case 4:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_PROJECTILE;
+                    break;
+                case 5:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_MAGIC;
+                    break;
+                case 6:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_BLADE;
+                    break;
+                case 7:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_PROJECTILE;
+                    break;
+                case 8:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_RANGE] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_MAGIC;
+                    break;
+            }
 
 
-        //    switch (Random.Range(1, 5))
-        //    {
-        //        case 1:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)RESPONSES.RETREAT;
-        //            break;
-        //        case 2:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)RESPONSES.HIDE;
-        //            break;
-        //        case 3:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)RESPONSES.ATTACK_WITH_STEELBLADE;
-        //            break;
-        //        case 4:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)RESPONSES.ATTACK_WITH_PROJECTILE;
-        //            break;
-        //    }
+            switch (Random.Range(1, 9))
+            {
+                case 1:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_BLADE;
+                    break;
+                case 2:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_PROJECTILE;
+                    break;
+                case 3:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_BLADE;
+                    break;
+                case 4:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_PROJECTILE;
+                    break;
+                case 5:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_MAGIC;
+                    break;
+                case 6:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_BLADE;
+                    break;
+                case 7:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_PROJECTILE;
+                    break;
+                case 8:
+                    newCreature.m_chromosomes[(int)SCENARIOS.ATTACKED_BY_GROUP] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_MAGIC;
+                    break;
+            }
 
-        //    switch (Random.Range(1, 5))
-        //    {
-        //        case 1:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)RESPONSES.RETREAT;
-        //            break;
-        //        case 2:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)RESPONSES.HIDE;
-        //            break;
-        //        case 3:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)RESPONSES.ATTACK_WITH_STEELBLADE;
-        //            break;
-        //        case 4:
-        //            newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)RESPONSES.ATTACK_WITH_PROJECTILE;
-        //            break;
-        //    }
+            switch (Random.Range(1, 9))
+            {
+                case 1:
+                    newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_BLADE;
+                    break;
+                case 2:
+                    newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_NORMAL_PROJECTILE;
+                    break;
+                case 3:
+                    newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_BLADE;
+                    break;
+                case 4:
+                    newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_PROJECTILE;
+                    break;
+                case 5:
+                    newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_FIRE_MAGIC;
+                    break;
+                case 6:
+                    newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_BLADE;
+                    break;
+                case 7:
+                    newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_PROJECTILE;
+                    break;
+                case 8:
+                    newCreature.m_chromosomes[(int)SCENARIOS.HEALER_PRESENT] = (int)ATTACK_RESPONSES.ATTACK_WITH_ICE_MAGIC;
+                    break;
+            }
 
-        //    return newCreature;
-        //}
-        //else
-        //{
-        //    return unmutatedCreature;
-        //}
+            return newCreature;
+        }
+        else
+        {
+            return unmutatedCreature;
+        }
 
-        return newCreature;
+        //return newCreature;
     }
 
     public void AssignNewChromosomes(Creature_Genetics target)
