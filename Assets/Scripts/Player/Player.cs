@@ -13,11 +13,16 @@ public class Player : MonoBehaviour
     public bool m_isDead = false;
     public float m_respawnDelay = 2f;
     Vector3 _initialPosition;                   // THIS SHOULD BE IN THE CONTROLLER
+    public Creature_Health m_target;
+
 
     Player_Ability m_playerAbility;
     Player_Melee m_pMelee;
     Player_Range m_pRange;
     Player_Healer m_pHealer;
+    ObjectSelector m_objectSelector;
+
+    
 
 
     private void Start()
@@ -26,6 +31,7 @@ public class Player : MonoBehaviour
         m_pMelee = GetComponent<Player_Melee>();
         m_pRange = GetComponent<Player_Range>();
         m_pHealer = GetComponent<Player_Healer>();
+        m_objectSelector = GameObject.FindObjectOfType<ObjectSelector>();
         m_currentHealth = m_maxHealth;
         _initialPosition = transform.position;
     }
@@ -54,6 +60,19 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(m_objectSelector.m_selectedNPC != null)
+        {
+            print("got target");
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (m_pRange != null)
+                {
+                    m_pRange.ShootProjectile(m_objectSelector.GetSelectedCreature());
+                }
+            }
+        }
+
         if (Input.GetKey(KeyCode.D))
         {
             transform.Translate(m_speed * Vector3.right * Time.deltaTime);
@@ -74,13 +93,7 @@ public class Player : MonoBehaviour
             transform.Translate(m_speed * Vector3.back * Time.deltaTime);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (m_pRange != null)
-            {
-                m_pRange.ShootProjectile();
-            }
-        }
+        
 
         if (Input.GetKeyDown(KeyCode.Q))
         {

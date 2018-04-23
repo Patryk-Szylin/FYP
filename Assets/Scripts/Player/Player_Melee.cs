@@ -6,6 +6,12 @@ public class Player_Melee : MonoBehaviour
 {
     public float m_meleeAttack = 2;
 
+
+    // Fire malee attack
+
+    // Ice Malee Attack
+
+
     public void MeleeAttack()
     {
         RaycastHit hit;

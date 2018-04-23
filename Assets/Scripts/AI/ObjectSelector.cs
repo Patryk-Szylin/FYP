@@ -41,4 +41,10 @@ public class ObjectSelector : MonoBehaviour
             //print("Mouse is down");
         }
     }
+
+    public Creature_Health GetSelectedCreature()
+    {
+        return m_selectedNPC.GetComponent<Creature_Health>();
+    }
+
 }

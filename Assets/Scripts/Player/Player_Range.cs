@@ -5,13 +5,24 @@ using UnityEngine;
 public class Player_Range : MonoBehaviour
 {
     public float m_rangeAttack = 1;
-    public Projectile m_prefab;
+
+    public List<Projectile> m_prefabs;
+
+
     public float m_force;
 
-    public void ShootProjectile()
+
+
+    public void ShootProjectile(Creature_Health target)
     {
-        var go = Instantiate(m_prefab, transform.position, Quaternion.identity);
-        go.m_damage = m_rangeAttack;
-        go.GetComponent<Rigidbody>().AddForce(Vector3.forward * m_force);
+        var randomIndex = Random.Range(0, m_prefabs.Count - 1);
+        var randomProjectile = m_prefabs[randomIndex];
+        var projectileDmg = randomProjectile.m_damage;
+        var go = Instantiate(randomProjectile, transform.position, Quaternion.identity);
+        go.m_damage = projectileDmg;
+
+        Vector3 projectileDir = (target.transform.position - transform.position).normalized;
+        Vector3 dir = new Vector3(projectileDir.x, 0, projectileDir.z);
+        go.GetComponent<Rigidbody>().AddForce(dir * m_force);
     }
 }
