@@ -16,13 +16,16 @@ public class Player : MonoBehaviour
     public Creature_Health m_target;
 
 
+
+
+
     Player_Ability m_playerAbility;
     Player_Melee m_pMelee;
     Player_Range m_pRange;
     Player_Healer m_pHealer;
     ObjectSelector m_objectSelector;
 
-    
+
 
 
     private void Start()
@@ -35,6 +38,17 @@ public class Player : MonoBehaviour
         m_currentHealth = m_maxHealth;
         _initialPosition = transform.position;
     }
+
+    public void ChangeClass(int index)
+    {
+        switch (index)
+        {
+            case 1:
+                m_pRange.enabled = false;
+                break;
+        }
+    }
+
 
     public void Damage(float dmg)
     {
@@ -60,16 +74,25 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(m_objectSelector.m_selectedNPC != null)
+        if (m_objectSelector.m_selectedNPC != null)
         {
             print("got target");
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
+
+                if (m_pMelee != null)
+                {
+                    print("Attackign");
+                    m_pMelee.MeleeAttack();
+                }
+
                 if (m_pRange != null)
                 {
                     m_pRange.ShootProjectile(m_objectSelector.GetSelectedCreature());
                 }
+
+
             }
         }
 
@@ -93,17 +116,9 @@ public class Player : MonoBehaviour
             transform.Translate(m_speed * Vector3.back * Time.deltaTime);
         }
 
-        
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            
-            if(m_pMelee != null)
-            {
-                print("Attackign");
-                m_pMelee.MeleeAttack();
-            }
-        }
+
+
 
     }
 
