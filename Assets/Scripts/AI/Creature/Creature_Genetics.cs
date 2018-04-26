@@ -49,6 +49,8 @@ public enum DEFEND_RESPONSES
     BLOCK
 }
 
+
+
 public class Creature_Genetics : MonoBehaviour
 {
     public const int NO_OF_CHROMOSOMES = 4;
@@ -59,6 +61,7 @@ public class Creature_Genetics : MonoBehaviour
     public float m_totalDamageDealt;
     public float m_totalDamageReceived;
     public float fitness;
+
 
     public void CreateIndividual()
     {

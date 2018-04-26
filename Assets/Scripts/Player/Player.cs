@@ -16,9 +16,6 @@ public class Player : MonoBehaviour
     public Creature_Health m_target;
 
 
-
-
-
     Player_Ability m_playerAbility;
     Player_Melee m_pMelee;
     Player_Range m_pRange;

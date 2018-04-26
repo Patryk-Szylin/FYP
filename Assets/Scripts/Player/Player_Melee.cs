@@ -26,6 +26,7 @@ public class Player_Melee : MonoBehaviour
             if (creature != null)
             {
                 creature.Damage(m_meleeAttack);
+                creature.GetComponent<Creature_Genetics>().m_totalDamageReceived += m_meleeAttack;
             }
         }
     }

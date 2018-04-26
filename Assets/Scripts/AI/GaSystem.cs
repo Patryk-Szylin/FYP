@@ -47,8 +47,8 @@ public class GaSystem : MonoBehaviour
         {
             m_creatures[i].CreateIndividual();
 
-            m_creatures[i].m_totalDamageReceived = Random.Range(10, 100);
-            m_creatures[i].m_totalDamageDealt = Random.Range(10, 100);
+            //m_creatures[i].m_totalDamageReceived = Random.Range(10, 100);
+            //m_creatures[i].m_totalDamageDealt = Random.Range(10, 100);
         }
     }
 

@@ -12,6 +12,7 @@ public class Projectile : MonoBehaviour
         if (creature != null)
         {
             creature.Damage(m_damage);
+            creature.GetComponent<Creature_Genetics>().m_totalDamageReceived += m_damage;
             Destroy(this.gameObject);
         }
     }

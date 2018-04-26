@@ -34,6 +34,10 @@ public class Creature_Brain : MonoBehaviour
     public float m_meleeRange = 2f;
     public float m_meleeAttackSpeed = 2.2f;
 
+    // Recorded stats
+
+
+
     // Range attributes
     // stats
     public float m_cooldown;
@@ -377,15 +381,18 @@ public class Creature_Brain : MonoBehaviour
         if (m_genetics.m_chromosomes[1] == 1)
         {
             go = Instantiate(m_projectilePrefab, transform.position, Quaternion.identity);
+            go.m_owner = this;
         }
         else if (m_genetics.m_chromosomes[1] == 3)  // If the response is to shoot fire projectile
         {
             go = Instantiate(m_fireProjectilePrefab, transform.position, Quaternion.identity);
             m_mesh.materials[0] = m_fireBody;
+            go.m_owner = this;
         }
         else if (m_genetics.m_chromosomes[1] == 6)  // If the response is to shoot ice projectile
         {
             go = Instantiate(m_iceProjectilePrefab, transform.position, Quaternion.identity);
+            go.m_owner = this;
         }
 
         go.m_damage = m_rangeDamage;
@@ -429,6 +436,7 @@ public class Creature_Brain : MonoBehaviour
                     m_anim.SetBool("playerInRange", true);
                     m_anim.SetBool("IsChasing", false);
                     _playerTarget.Damage(m_meleeDamage);
+                    GetComponent<Creature_Genetics>().m_totalDamageDealt += m_meleeDamage;
                     m_nextMeleeReadyTime = m_meleeAttackSpeed + Time.time;
                 }
             }
