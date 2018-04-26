@@ -14,6 +14,7 @@ public class Projectile_Creature : MonoBehaviour
         {
             //player.Damage(m_damage);
             player.Damage(m_damage);
+
             m_owner.GetComponent<Creature_Genetics>().m_totalDamageDealt += m_damage;
             Destroy(this.gameObject);
         }
