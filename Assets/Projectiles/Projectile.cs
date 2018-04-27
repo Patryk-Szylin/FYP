@@ -6,6 +6,9 @@ public class Projectile : MonoBehaviour
 {
     public float m_damage;
 
+    // DO I NEED TO STORE WHAT SORT OF PROJECTILE IT IS ?
+    // FIRE / ICE / NORMAL
+
     private void OnTriggerEnter(Collider other)
     {
         var creature = other.GetComponent<Creature_Health>();

@@ -1,13 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Player_Melee : MonoBehaviour
 {
     public float m_meleeAttack = 2;
+    public StackFSM m_brain = new StackFSM();
+    public List<Action> m_actions = new List<Action>();
 
 
     // Fire malee attack
+    public void FireMaleeAttack()
+    {
+        // Turn on fire animation when executed (just copy the sword from creature)
+
+
+    }
+
 
     // Ice Malee Attack
 
@@ -30,4 +40,7 @@ public class Player_Melee : MonoBehaviour
             }
         }
     }
+
+
+
 }

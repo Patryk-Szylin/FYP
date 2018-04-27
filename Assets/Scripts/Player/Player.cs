@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public bool m_enableSimulation = false;
 
     public float m_speed = 15f;                 // SEPERATE IN ANOTHER COMPONENT
     public float m_currentHealth;               // SEPERATE IN ANOTHER COMPONENT
@@ -34,6 +35,9 @@ public class Player : MonoBehaviour
         m_objectSelector = GameObject.FindObjectOfType<ObjectSelector>();
         m_currentHealth = m_maxHealth;
         _initialPosition = transform.position;
+
+        // Populating simulation behaviours
+
     }
 
     public void ChangeClass(int index)
@@ -71,6 +75,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(m_enableSimulation == true)
+            GetComponent<Player_CombatSimulation>().enabled = true;
+        else
+            GetComponent<Player_CombatSimulation>().enabled = false;
+
         if (m_objectSelector.m_selectedNPC != null)
         {
             print("got target");
@@ -93,6 +102,11 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            m_enableSimulation = !m_enableSimulation;
+        }
+
         if (Input.GetKey(KeyCode.D))
         {
             transform.Translate(m_speed * Vector3.right * Time.deltaTime);
@@ -112,12 +126,8 @@ public class Player : MonoBehaviour
         {
             transform.Translate(m_speed * Vector3.back * Time.deltaTime);
         }
-
-
-
-
-
     }
+
 
     IEnumerator Respawn()
     {
@@ -128,6 +138,13 @@ public class Player : MonoBehaviour
         m_isDead = false;
         SetActiveState(true);
     }
+
+
+    public void EnableSimulation(bool state)
+    {
+
+    }
+
 
     void SetActiveState(bool state)
     {
