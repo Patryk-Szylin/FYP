@@ -11,6 +11,8 @@ public class Creature_Health : MonoBehaviour
 
     public bool m_isDead = false;
     public RectTransform m_healthBar;
+    private Creature_Genetics m_genetics;
+
 
 
     Vector3 _initialPosition;   // THIS SHOULD BE IN THE CONTROLLER
@@ -20,6 +22,7 @@ public class Creature_Health : MonoBehaviour
         m_currentHealth = m_maxHealth;
         //StartCoroutine("CountDown");
         _initialPosition = transform.position;
+        m_genetics = GetComponent<Creature_Genetics>();
     }
 
     private void Update()
@@ -74,7 +77,7 @@ public class Creature_Health : MonoBehaviour
         SetActiveState(true);
 
         // Generate new chromosomes 
-        GetComponent<Creature_Genetics>().CreateIndividual();
+        m_genetics.CreateIndividual();
     }
 
     void SetActiveState(bool state)

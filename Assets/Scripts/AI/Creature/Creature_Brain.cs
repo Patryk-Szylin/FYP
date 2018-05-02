@@ -240,14 +240,14 @@ public class Creature_Brain : MonoBehaviour
 
                 if (playerMelee != null)
                 {
-                    print("FOUND MELEE");
+                    //print("FOUND MELEE");
                     _playerTarget = playerMelee.GetComponent<Player>();
                     m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[0]]);
                 }
 
                 if (playerRange != null)
                 {
-                    print("FOUND RANGED");
+                    //print("FOUND RANGED");
                     //m_behaviours[1]();
                     _playerTarget = playerRange.GetComponent<Player>();
                     m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[1]]);
@@ -437,6 +437,7 @@ public class Creature_Brain : MonoBehaviour
                     _playerTarget.Damage(m_meleeDamage);
                     GetComponent<Creature_Genetics>().m_totalDamageDealt += m_meleeDamage;
                     m_nextMeleeReadyTime = m_meleeAttackSpeed + Time.time;
+
                 }
             }
 

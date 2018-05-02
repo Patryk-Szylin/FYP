@@ -105,15 +105,14 @@ public class Player_CombatSimulation : MonoBehaviour
 
             m_target = closestTarget.GetComponent<Creature_Health>();
             //m_brain.PopState();
-            //m_brain.PushState(MoveTowardsTarget);
-            m_brain.PushState(AttackWithRandomAbility);
-
+            m_brain.PushState(MoveTowardsTarget);
+            //m_brain.PushState(AttackWithRandomAbility;
         }
     }
 
-    public void MoveTowardsTarget(Creature_Health target)
+    public void MoveTowardsTarget()
     {
-        if (target != null)
+        if (m_target != null)
         {
             var dir = (m_target.transform.position - this.transform.position).normalized;
             var distance = Vector3.Distance(m_target.transform.position, this.transform.position);
@@ -126,7 +125,9 @@ public class Player_CombatSimulation : MonoBehaviour
                     
                 } else
                 {
-                    print("move back");
+                    //print("move back");
+                    m_brain.PopState();
+                    m_brain.PushState(AttackWithRandomAbility);
                     //transform.Translate(m_movementSpeed * -target.transform.forward * Time.deltaTime);
                 }                
             }
@@ -136,6 +137,9 @@ public class Player_CombatSimulation : MonoBehaviour
                 if (distance >= m_meleeRange)
                 {
                     transform.Translate(m_movementSpeed * dir * Time.deltaTime);
+                } else
+                {
+                    m_brain.PushState(AttackWithRandomAbility);
                 }
             }
 
@@ -146,9 +150,11 @@ public class Player_CombatSimulation : MonoBehaviour
 
     public void AttackWithRandomAbility()
     {
+
+
         if (m_target && m_target.m_isDead == false)
         {
-            MoveTowardsTarget(m_target);
+            print("Attacking with random ability");
 
             int randomIndex = UnityEngine.Random.Range(0, m_behaviours.Count);
             var randomAbility = m_behaviours[randomIndex];
@@ -208,7 +214,7 @@ public class Player_CombatSimulation : MonoBehaviour
         if (m_target)
         {
             print("Melee attack");
-            MoveTowardsTarget(m_target);
+            //MoveTowardsTarget(m_target);
             var step = m_movementSpeed * Time.deltaTime;
             var creaturePos = m_target.transform.position;
             var distance = Vector3.Distance(creaturePos, transform.position);
@@ -254,7 +260,7 @@ public class Player_CombatSimulation : MonoBehaviour
         if (m_target)
         {
             print("Projectile attack");
-            MoveTowardsTarget(m_target);
+            //MoveTowardsTarget(m_target);
             var creaturePos = m_target.transform.position;
             var dir = (creaturePos - transform.position).normalized;
             var step = m_movementSpeed * Time.deltaTime;
