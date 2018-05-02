@@ -43,6 +43,10 @@ public class StackFSM : MonoBehaviour
         return m_stack.Count > 0 ? m_stack.Peek() : null;
     }
 
+    public int getStackCount()
+    {
+        return m_stack.Count;
+    }
 
 
 

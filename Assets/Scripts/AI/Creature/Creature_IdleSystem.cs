@@ -26,7 +26,7 @@ public class Creature_IdleSystem : MonoBehaviour
 
     public void Walk()
     {
-        if (m_brainSystem._playerTarget)
+        if (m_brainSystem.m_playerTarget)
             return;
 
         var randomPoint = GenerateIdleDestinationPoint();
@@ -38,7 +38,7 @@ public class Creature_IdleSystem : MonoBehaviour
 
     public void Move()
     {
-        if (m_brainSystem._playerTarget)
+        if (m_brainSystem.m_playerTarget)
             return;
 
         var step = m_speed * Time.deltaTime;

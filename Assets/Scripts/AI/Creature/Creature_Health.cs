@@ -14,7 +14,6 @@ public class Creature_Health : MonoBehaviour
     private Creature_Genetics m_genetics;
 
 
-
     Vector3 _initialPosition;   // THIS SHOULD BE IN THE CONTROLLER
 
     public void Start()
@@ -53,6 +52,8 @@ public class Creature_Health : MonoBehaviour
         if(m_currentHealth <= 0 && !m_isDead)
         {
             m_isDead = true;
+            // Generate new chromosomes 
+            //m_genetics.CreateIndividual();
             SetActiveState(false);
             StartCoroutine(Respawn());
         }
@@ -76,8 +77,7 @@ public class Creature_Health : MonoBehaviour
         m_isDead = false;
         SetActiveState(true);
 
-        // Generate new chromosomes 
-        m_genetics.CreateIndividual();
+
     }
 
     void SetActiveState(bool state)

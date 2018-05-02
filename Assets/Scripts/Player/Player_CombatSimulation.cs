@@ -87,7 +87,7 @@ public class Player_CombatSimulation : MonoBehaviour
     {
         if (m_target == null)
         {
-            print("look for new target");
+            //print("look for new target");
             Creature_Genetics closestTarget = null;
             float previousDistance = 9999;
 
@@ -154,7 +154,7 @@ public class Player_CombatSimulation : MonoBehaviour
 
         if (m_target && m_target.m_isDead == false)
         {
-            print("Attacking with random ability");
+            //print("Attacking with random ability");
 
             int randomIndex = UnityEngine.Random.Range(0, m_behaviours.Count);
             var randomAbility = m_behaviours[randomIndex];
@@ -213,7 +213,7 @@ public class Player_CombatSimulation : MonoBehaviour
         
         if (m_target)
         {
-            print("Melee attack");
+            //print("Melee attack");
             //MoveTowardsTarget(m_target);
             var step = m_movementSpeed * Time.deltaTime;
             var creaturePos = m_target.transform.position;
@@ -231,7 +231,6 @@ public class Player_CombatSimulation : MonoBehaviour
             {
                 if (m_target.GetComponent<Creature_Health>().m_isDead == true)
                 {
-                    print("Target is ded");
                     m_target = null;
                     m_brain.PopState();
                     return;
@@ -259,7 +258,7 @@ public class Player_CombatSimulation : MonoBehaviour
     {
         if (m_target)
         {
-            print("Projectile attack");
+            //print("Projectile attack");
             //MoveTowardsTarget(m_target);
             var creaturePos = m_target.transform.position;
             var dir = (creaturePos - transform.position).normalized;
@@ -269,7 +268,7 @@ public class Player_CombatSimulation : MonoBehaviour
 
             if (m_target.GetComponent<Creature_Health>().m_isDead == true)
             {
-                print("Target is ded");
+                //print("Target is ded");
                 m_target = null;
                 m_brain.PopState();
                 return;
@@ -290,7 +289,7 @@ public class Player_CombatSimulation : MonoBehaviour
     {
         Projectile go = new Projectile();
         go = Instantiate(m_projectilePrefab, transform.position, Quaternion.identity);
-
+        go.m_owner = this.GetComponent<Player>();
 
         //go.m_damage = m_rangeDamage;
         go.GetComponent<Rigidbody>().AddForce(dir * 1500f);

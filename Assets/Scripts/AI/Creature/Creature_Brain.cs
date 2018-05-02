@@ -31,8 +31,12 @@ public class Creature_Brain : MonoBehaviour
     public float m_fieldOfViewRange = 5f;           // THIS SHOULD BE IN THE CONTROLLER
     public float m_rangeDamage = 1f;            // SHOULD BE IN SEPERATE COMPONENT
     public float m_meleeDamage = 1f;            // SHOULD BE IN SEPERATE COMPONENT
+    public float m_magicDamage = 2f;
     public float m_meleeRange = 2f;
     public float m_meleeAttackSpeed = 2.2f;
+
+    public bool m_canAttack = true;
+
 
     // Recorded stats
 
@@ -45,11 +49,15 @@ public class Creature_Brain : MonoBehaviour
     public float m_nextReadyTime;
 
 
-    public Player _playerTarget;               // THIS SHOULD BE IN THE CONTROLLER
+    public Player m_playerTarget;               // THIS SHOULD BE IN THE CONTROLLER
 
     public float m_nextMeleeReadyTime;
     public float m_meleeCooldown;
     public float m_meleeCooldownLeft;
+
+    public float m_nextMagicReadyTime;
+    public float m_magicCooldown;
+    public float m_magicCooldownLeft;
 
     // Respawn-related variables
     private Vector3 _initialPosition;           // THIS SHOULD BE IN THE CONTROLLER
@@ -84,7 +92,7 @@ public class Creature_Brain : MonoBehaviour
         m_anim = GetComponentInChildren<Animator>();
         m_mesh = GetComponentInChildren<SkinnedMeshRenderer>();
 
-        _playerTarget = null;
+        m_playerTarget = null;
         m_idleSystem.InitiateIdleSystem();
         m_brain.PushState(IdleState);
         _initialPosition = transform.position;
@@ -116,7 +124,7 @@ public class Creature_Brain : MonoBehaviour
             }
         }
 
-        if (_playerTarget)
+        if (m_playerTarget)
             m_anim.SetBool("foundPlayer", true);
         else
             m_anim.SetBool("foundPlayer", false);
@@ -127,6 +135,11 @@ public class Creature_Brain : MonoBehaviour
         // THIS SHOULD BE IN THE START FUNCTION
         // The only reason this is in update is so I can switch chromosmes at runtime
         ChangeCreatureTextures();
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            print("Stack count is ; " + m_brain.getStackCount());
+        }
 
 
         // If more players pop up into the fight, then react with executing chromosome for fighting vs group
@@ -231,8 +244,19 @@ public class Creature_Brain : MonoBehaviour
     // Some creatures could turn around faster or randomly walk to a different points in the map?
     public void IdleState()
     {
+        print("IDLE STATE");
+
+        if (m_playerTarget)
+        {
+            if (m_playerTarget.GetComponent<Player_Range>())
+            {
+                m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[1]]);
+            }
+        }
+
         if (m_nearbyPlayers.Count == 1)
         {
+            print("THERE ARE SOME PLAYERS AROUND");
             foreach (var p in m_nearbyPlayers)
             {
                 var playerMelee = p.GetComponent<Player_Melee>();
@@ -241,19 +265,22 @@ public class Creature_Brain : MonoBehaviour
                 if (playerMelee != null)
                 {
                     //print("FOUND MELEE");
-                    _playerTarget = playerMelee.GetComponent<Player>();
+                    m_playerTarget = playerMelee.GetComponent<Player>();
                     m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[0]]);
+
                 }
 
                 if (playerRange != null)
                 {
                     //print("FOUND RANGED");
                     //m_behaviours[1]();
-                    _playerTarget = playerRange.GetComponent<Player>();
+                    m_playerTarget = playerRange.GetComponent<Player>();
                     m_brain.PushState(m_behaviours[m_genetics.m_chromosomes[1]]);
                 }
             }
         }
+
+        
 
         // Then if there's more than one player, then it doesn't matter which type of player it is
         // Beacuse I'm gonna execute chromosome to respond to group attacks
@@ -264,15 +291,6 @@ public class Creature_Brain : MonoBehaviour
         }
     }
 
-    public void Hide()
-    {
-        DisplayPopUpText("HIDING!");
-        // TODO: Display UI pop up text for now
-
-
-
-        CheckIfPlayerOutOfRange();
-    }
 
     public void DisplayPopUpText(string text)
     {
@@ -280,74 +298,11 @@ public class Creature_Brain : MonoBehaviour
         m_popupText.text = text;
     }
 
-    public void Retreat()
-    {
-        DisplayPopUpText("RETREATING!");
-        // TODO: Display UI pop up text for now
-
-        CheckIfPlayerOutOfRange();
-    }
-
-
-
-
-
-    public void Attack(SCENARIOS scenario, int attackType)
-    {
-        if (_playerTarget)
-        {
-            var step = m_movementSystem.m_chaseSpeed * Time.deltaTime;
-            var playerPos = _playerTarget.transform.position;
-            var distance = Vector3.Distance(playerPos, transform.position);
-            var dir = (playerPos - transform.position).normalized;
-            var newDir = Vector3.RotateTowards(transform.forward, dir, step, 0.0f);
-
-
-
-            switch (attackType)
-            {
-                case 1:
-                    // Attack with normal blade
-                    break;
-                case 2:
-                    // Attack with normal projectile
-                    break;
-                case 3:
-                    // Attack with fire blade
-                    break;
-                case 4:
-                    // Attakc with fire projectile
-                    break;
-                case 5:
-                    // Attack with fire magic
-                    break;
-                case 6:
-                    // Attack with ice blade
-                    break;
-                case 7:
-                    // Attack with ice projectile
-                    break;
-                case 8:
-                    // Attack with ice magic
-                    break;
-            }
-        }
-
-
-        // Check what attack response is in chromosomes
-
-        // If player target, Check what player type it is 
-
-
-        // Execute appropriate attack when seeing the player
-
-    }
-
 
     public void CheckIfPlayerOutOfRange()
     {
         // If out of range, move back to idle
-        if (Vector3.Distance(transform.position, _playerTarget.transform.position) > m_outOfRangeDistance && _playerTarget)
+        if (Vector3.Distance(transform.position, m_playerTarget.transform.position) > m_outOfRangeDistance && m_playerTarget)
         {
             // Set animation's bool in range to false
             m_anim.SetBool("playerInRange", false);
@@ -355,7 +310,7 @@ public class Creature_Brain : MonoBehaviour
             m_brain.PopState();
             //m_brain.PushState(MoveToInitialPosition);
             m_idleSystem.InitiateIdleSystem();
-            _playerTarget = null;
+            m_playerTarget = null;
             m_popupText.gameObject.SetActive(false);
         }
     }
@@ -399,22 +354,23 @@ public class Creature_Brain : MonoBehaviour
         go.GetComponent<Rigidbody>().AddForce(dir * 1500f);
     }
 
-    public void ShootMagic(Vector3 targetPos)
-    {
-
-    }
-
-
     public void AttackWithBlade()
     {
-        if (_playerTarget)
+        if (m_playerTarget && m_canAttack == true)
         {
             var step = m_movementSystem.m_chaseSpeed * Time.deltaTime;
-            var playerPos = _playerTarget.transform.position;
+            var playerPos = m_playerTarget.transform.position;
             var distance = Vector3.Distance(playerPos, transform.position);
             var dir = (playerPos - transform.position).normalized;
             var newDir = Vector3.RotateTowards(transform.forward, dir, step, 0.0f);
 
+
+            if (m_playerTarget.m_isDead)
+            {
+                m_brain.PopState();
+                //m_canAttack = false;
+                return;
+            }
 
             if (distance >= m_meleeRange)
             {
@@ -422,19 +378,19 @@ public class Creature_Brain : MonoBehaviour
                 m_anim.SetBool("playerInRange", false);
                 m_anim.SetBool("IsAttacking", false);
                 m_anim.SetBool("IsChasing", true);
-                transform.position = Vector3.MoveTowards(transform.position, _playerTarget.transform.position, step);
+                transform.position = Vector3.MoveTowards(transform.position, m_playerTarget.transform.position, step);
                 transform.rotation = Quaternion.LookRotation(new Vector3(newDir.x, 0, newDir.z));
             }
             else
             {
-                print("Deal damage to the player");
+                print("Attack player with : BLADE");
                 if (Time.time > m_nextMeleeReadyTime)
                 {
                     // Play Attacking animation
                     m_anim.SetBool("IsAttacking", true);
                     m_anim.SetBool("playerInRange", true);
                     m_anim.SetBool("IsChasing", false);
-                    _playerTarget.Damage(m_meleeDamage);
+                    m_playerTarget.Damage(m_meleeDamage);
                     GetComponent<Creature_Genetics>().m_totalDamageDealt += m_meleeDamage;
                     m_nextMeleeReadyTime = m_meleeAttackSpeed + Time.time;
 
@@ -447,13 +403,23 @@ public class Creature_Brain : MonoBehaviour
 
     public void AttackWithProjectile()
     {
-        if (_playerTarget)
+        if (m_playerTarget && m_canAttack == true)
         {
-            var playerPos = _playerTarget.transform.position;
+            print("Attack player with : PROJECTILE");
+            var playerPos = m_playerTarget.transform.position;
             var dir = (playerPos - transform.position).normalized;
             var step = m_movementSystem.m_speed * Time.deltaTime;
             var newDir = Vector3.RotateTowards(transform.forward, dir, step, 0.0f);
             transform.rotation = Quaternion.LookRotation(new Vector3(newDir.x, 0, newDir.z));
+
+
+            if (m_playerTarget.m_isDead)
+            {
+                m_brain.PopState();
+                //m_canAttack = false;
+                return;
+            }
+
 
             if (Time.time > m_nextReadyTime)
             {
@@ -472,14 +438,26 @@ public class Creature_Brain : MonoBehaviour
         DisplayPopUpText("Attacking with Magic!");
         // TODO: Display UI pop up text for now
 
+        if (m_playerTarget && m_canAttack == true)
+        {
+            if(m_playerTarget.m_isDead)
+            {
+                m_brain.PopState();
+                m_canAttack = false;
+                return;
+            }
 
+            if (Time.time > m_nextMagicReadyTime)
+            {
+                // Play attacking animation
+                m_playerTarget.Damage(m_magicDamage);
+                m_nextMagicReadyTime = m_magicCooldown + Time.time;
+            }
+        }
 
         CheckIfPlayerOutOfRange();
 
     }
-
-
-
 
     #endregion
 

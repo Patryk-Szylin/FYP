@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
 
         if (m_objectSelector.m_selectedNPC != null)
         {
-            print("got target");
+            //print("got target");
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
