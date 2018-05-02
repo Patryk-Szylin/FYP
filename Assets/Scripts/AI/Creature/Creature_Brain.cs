@@ -443,7 +443,7 @@ public class Creature_Brain : MonoBehaviour
             if(m_playerTarget.m_isDead)
             {
                 m_brain.PopState();
-                m_canAttack = false;
+                //m_canAttack = false;
                 return;
             }
 

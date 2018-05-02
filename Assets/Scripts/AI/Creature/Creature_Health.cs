@@ -24,27 +24,6 @@ public class Creature_Health : MonoBehaviour
         m_genetics = GetComponent<Creature_Genetics>();
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            Damage(1f);
-        }
-    }
-
-    IEnumerator CountDown()
-    {
-        yield return new WaitForSeconds(1f);
-        Damage(1f);
-        UpdateHealthBar(m_currentHealth);
-        yield return new WaitForSeconds(1f);
-        Damage(1f);
-        UpdateHealthBar(m_currentHealth);
-        yield return new WaitForSeconds(1f);
-        Damage(1f);
-        UpdateHealthBar(m_currentHealth);
-    }
-
     public void Damage(float dmg)
     {
         m_currentHealth -= dmg;
