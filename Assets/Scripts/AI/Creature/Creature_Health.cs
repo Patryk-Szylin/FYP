@@ -71,7 +71,10 @@ public class Creature_Health : MonoBehaviour
         m_currentHealth = m_maxHealth;
         UpdateHealthBar(m_currentHealth);
         m_isDead = false;
-        SetActiveState(true);        
+        SetActiveState(true);
+
+        // Generate new chromosomes 
+        GetComponent<Creature_Genetics>().CreateIndividual();
     }
 
     void SetActiveState(bool state)
@@ -90,6 +93,8 @@ public class Creature_Health : MonoBehaviour
         {
             r.enabled = state;
         }
+
+        GetComponent<Creature_Brain>().enabled = state;
     }
 
 }

@@ -407,7 +407,6 @@ public class Creature_Brain : MonoBehaviour
 
     public void AttackWithBlade()
     {
-        print(_playerTarget);
         if (_playerTarget)
         {
             var step = m_movementSystem.m_chaseSpeed * Time.deltaTime;

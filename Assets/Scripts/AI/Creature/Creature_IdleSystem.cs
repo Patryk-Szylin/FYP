@@ -29,7 +29,6 @@ public class Creature_IdleSystem : MonoBehaviour
         if (m_brainSystem._playerTarget)
             return;
 
-        print("PLAY IDLE ANIMATION");
         var randomPoint = GenerateIdleDestinationPoint();
         m_destination = randomPoint;
 
@@ -42,7 +41,6 @@ public class Creature_IdleSystem : MonoBehaviour
         if (m_brainSystem._playerTarget)
             return;
 
-        print("WALKING...");
         var step = m_speed * Time.deltaTime;
         var dir = (m_destination - transform.position).normalized;
         var newDir = Vector3.RotateTowards(transform.forward, dir, step, 0.0f);

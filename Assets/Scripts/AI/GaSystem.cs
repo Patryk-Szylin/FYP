@@ -38,7 +38,6 @@ public class GaSystem : MonoBehaviour
 
     public List<Creature_Genetics> m_creatures = new List<Creature_Genetics>();
     public List<Creature_Genetics> m_orderedCreatures = new List<Creature_Genetics>();
-    public List<Creature_Genetics> m_newCreatures = new List<Creature_Genetics>();
 
 
     private void Start()
