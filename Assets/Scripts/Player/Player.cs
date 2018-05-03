@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     public bool m_enableSimulation = false;
 
@@ -75,6 +76,9 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isLocalPlayer)
+            return;
+
         if(m_enableSimulation == true)
             GetComponent<Player_CombatSimulation>().enabled = true;
         else
