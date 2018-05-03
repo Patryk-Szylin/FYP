@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Networking;
 
-public class GaSystem : MonoBehaviour
+public class GaSystem : NetworkBehaviour
 {
     #region Singleton
 
@@ -38,16 +39,39 @@ public class GaSystem : MonoBehaviour
 
     public List<Creature_Genetics> m_creatures = new List<Creature_Genetics>();
     public List<Creature_Genetics> m_orderedCreatures = new List<Creature_Genetics>();
-
-
+    public List<GameObject> m_creaturesToSpawn = new List<GameObject>();
+    public List<Creature_Genetics> m_networkedNPCs = new List<Creature_Genetics>();
+    
     private void Start()
     {
-        for (int i = 0; i < m_creatures.Count; i++)
-        {
-            m_creatures[i].CreateIndividual();
+        //for (int i = 0; i < m_creaturesToSpawn.Count; i++)
+        //{
+        //    //var go = Instantiate(m_creaturesToSpawn[i], Vector3.zero, m_creaturesToSpawn[i].transform.rotation);
+        //    Instantiate(m_creaturesToSpawn[i], Vector3.zero, m_creaturesToSpawn[i].transform.rotation);
+        //    //NetworkServer.Spawn(go);
+        //}
 
-            //m_creatures[i].m_totalDamageReceived = Random.Range(10, 100);
-            //m_creatures[i].m_totalDamageDealt = Random.Range(10, 100);
+        //for (int i = 0; i < m_creatures.Count; i++)
+        //{
+        //    m_creatures[i].CreateIndividual();
+
+        //    //m_creatures[i].m_totalDamageReceived = Random.Range(10, 100);
+        //    //m_creatures[i].m_totalDamageDealt = Random.Range(10, 100);
+        //}
+    }
+
+    [Server]
+    public void SpawnCreatures()
+    {
+        for (int i = 0; i < m_creaturesToSpawn.Count; i++)
+        {
+            var go = Instantiate(m_creaturesToSpawn[i], Vector3.zero, m_creaturesToSpawn[i].transform.rotation);
+            var creature = go.GetComponent<Creature_Genetics>();
+            creature.CreateIndividual();
+            m_networkedNPCs.Add(creature);
+            //Instantiate(m_creaturesToSpawn[i], Vector3.zero, m_creaturesToSpawn[i].transform.rotation);
+
+            NetworkServer.Spawn(go);
         }
     }
 
@@ -123,6 +147,20 @@ public class GaSystem : MonoBehaviour
     {
         m_prefab.GetComponent<Creature_Genetics>().AssignNewChromosomes(newCreature);
         var go = Instantiate(m_prefab, transform.position, transform.rotation) as GameObject;
+    }
+
+    public List<Creature_Genetics> GetNetworkCreatures()
+    {
+        //List<Creature_Genetics> creatures = new List<Creature_Genetics>();
+
+        //for (int i = 0; i < m_creaturesToSpawn.Count; i++)
+        //{
+        //    creatures.Add(m_creaturesToSpawn[i].GetComponent<Creature_Genetics>());
+        //}
+
+        //return creatures;
+
+        return m_networkedNPCs;
     }
 
 }

@@ -39,6 +39,11 @@ public class Player : NetworkBehaviour
 
         // Populating simulation behaviours
 
+        if (this.isServer)
+        {
+            GaSystem.Instance.SpawnCreatures();
+        }
+
     }
 
     public void ChangeClass(int index)
@@ -87,10 +92,9 @@ public class Player : NetworkBehaviour
         if (m_objectSelector.m_selectedNPC != null)
         {
             //print("got target");
-
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-
+                print("Shoot");
                 if (m_pMelee != null)
                 {
                     print("Attackign");
@@ -99,12 +103,13 @@ public class Player : NetworkBehaviour
 
                 if (m_pRange != null)
                 {
-                    m_pRange.ShootProjectile(m_objectSelector.GetSelectedCreature());
+                    m_pRange.ShootProjectile();
                 }
-
-
             }
+
         }
+
+
 
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {

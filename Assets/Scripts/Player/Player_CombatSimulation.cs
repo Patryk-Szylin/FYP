@@ -49,7 +49,7 @@ public class Player_CombatSimulation : MonoBehaviour
         SetPlayerTypeEnum();
 
         _gaSystem = GameObject.FindObjectOfType<GaSystem>();
-        m_creatures = _gaSystem.GetCreatures();
+        m_creatures = _gaSystem.GetNetworkCreatures();
         //m_behaviours.Add(MeleeAttack);
         m_behaviours.Add(AttackWithProjectile);
         m_behaviours.Add(MeleeAttack);

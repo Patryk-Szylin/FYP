@@ -25,9 +25,20 @@ public class Player_Range : MonoBehaviour
         var go = Instantiate(randomProjectile, transform.position, Quaternion.identity);
         go.m_damage = projectileDmg;
 
-        Vector3 projectileDir = (target.transform.position - transform.position).normalized;
+        Vector3 projectileDir;
+
+        if (target != null)
+        {
+            projectileDir = (target.transform.position - transform.position).normalized;
+        }
+        else
+        {
+            projectileDir = Vector3.forward;
+        }
+        
         Vector3 dir = new Vector3(projectileDir.x, 0, projectileDir.z);
         go.GetComponent<Rigidbody>().AddForce(dir * m_force);
     }
+
 
 }
