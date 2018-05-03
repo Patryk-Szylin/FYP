@@ -128,10 +128,18 @@ public class GaSystem : NetworkBehaviour
         return m_creatures;
     }
 
+    //public Creature_Genetics GetRandomCreature()
+    //{
+    //    Creature_Genetics randomCreature;
+    //    var randomIndex = Random.Range(0, m_creatures.Count - 1);
+    //    randomCreature = m_creatures[randomIndex];
+    //    return randomCreature;
+    //}
+
     public Creature_Genetics GetRandomCreature()
     {
         Creature_Genetics randomCreature;
-        var randomIndex = Random.Range(0, m_creatures.Count - 1);
+        var randomIndex = Random.Range(0, m_networkedNPCs.Count - 1);
         randomCreature = m_creatures[randomIndex];
         return randomCreature;
     }

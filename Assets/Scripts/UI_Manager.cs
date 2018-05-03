@@ -59,6 +59,9 @@ public class UI_Manager : MonoBehaviour
         "Defend using Resistance Buff"        
     };
 
+    // References
+    public UI_StatsPanel m_statsPanel;    
+
 
     [Header("Create new creature panel variables")]
     public GameObject m_createNewCreaturePanel;
@@ -99,6 +102,7 @@ public class UI_Manager : MonoBehaviour
     private void Start()
     {
         PopulateScenarioTextElements();
+        m_statsPanel = GetComponent<UI_StatsPanel>();
     }
 
     public void PopulateScenarioTextElements()
